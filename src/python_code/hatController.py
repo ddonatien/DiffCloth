@@ -1,3 +1,4 @@
+import time
 import diffcloth_py as diffcloth
 import numpy as np
 import time, math, random, scipy, utils, common, argparse, torch, os
@@ -83,7 +84,9 @@ def simulateAndGetLoss(x0a0pairs, render=True):
     sim.forwardConvergenceThreshold = 1e-8
     for (i, (x0_shift_torch, a0_shift_torch, _)) in enumerate(x0a0pairs):
         sim.resetSystem()
+        t = time.time()
         xvPairs = common.forwardSimulation(sim, x0_shift_torch.clone(), v0_torch.clone(), a0_shift_torch.clone(), getState, controller, pySim)
+        print("[simulationAndGetLoss] totalSeq: {} simulation {}-th seq took {} sec".format(len(x0a0pairs), i, time.time() - t))
         simulations.append(xvPairs)
         if render:
             diffcloth.render(sim, renderPosPairs=True, autoExit=True)
@@ -198,20 +201,24 @@ else:
     common.setRandomSeed(args.randSeed)
 
 # DiffSimulation Settings
+t0 =  time.time()
 sim = diffcloth.makeSim("wear_hat")
+print("Time to make sim: {}s".format(time.time() - t0))
 sim.gradientClippingThreshold, sim.gradientClipping = 100.0, False
 np.set_printoptions(precision=5)
 
 root_path = Path(__file__).resolve().parent
 parent_path = root_path / 'experiments' / example 
 exp_path = parent_path/ expName
-diffcloth.enableOpenMP(n_threads = 5)
+diffcloth.enableOpenMP(n_threads = 10)
 helper = diffcloth.makeOptimizeHelper(example)
 # forwardConvergence needs to be reset after helper is made
 sim.forwardConvergenceThreshold =  1e-8
 
 
+t1 = time.time()
 sim.resetSystem()
+print("Time to reset sim: {}s".format(time.time() - t1))
 pySim = pySim(sim, helper, True)
 state_info_init = sim.getStateInfo()
 ndof_u = sim.ndof_u
@@ -225,6 +232,10 @@ HEAD_CENTER_POS = sim.primitives[0].center.copy()
 CLOTH_INIT_POS_CENTER = x0_mat.mean(axis=0)
 
 x0_torch, v0_torch, a_torch, a0_torch, targetshape_torch, fxiedPointInitDist_torch, CLIP_REST_DIST = common.getTorchVectors(x0, v0, CLIP_INIT_POS, targetShape)
+print(x0_torch.shape,
+      v0_torch.shape,
+      a_torch.shape,
+      a0_torch.shape)
 X0A0pairs_eval = getX0A0DegTuplesUniformlyFromHeight(3, [10,30,60])
 attachmentIdx = sim.sceneConfig.customAttachmentVertexIdx[0][1]
 trainMinLoss, testMinLoss, trainBestEpoch, testBestEpoch, epochStart  = 10000, 10000, 0, 0, 0

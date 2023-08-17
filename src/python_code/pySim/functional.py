@@ -26,7 +26,6 @@ class SimFunction(autograd.Function):
             cppSim: diffcloth.Simulation,
             helper: diffcloth.OptimizeHelper
     ) -> Tuple[Tensor, Tensor]:
-        # print("Forward: {} {} {}".format(x.shape, v.shape, a.shape))
         ctx.helper = helper
         ctx.simulation = cppSim
         ctx.pastRecord = cppSim.getStateInfo()

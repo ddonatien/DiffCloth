@@ -130,6 +130,7 @@ public:
         double k_pertype[Constraint::CONSTRAINT_NUM];
         std::vector<std::vector<Spline>> controlPointSplines;
         std::vector<std::pair<int, double>> mu;
+        void set_k_pertype(double k1, double k2, double k3, double k4);
     };
 
 
@@ -206,6 +207,7 @@ public:
         int randSeed;
         int srandSeed;
 
+        void set_dL_dk_pertype(bool k1, bool k2, bool k3, bool k4);
     };
 
     struct TaskSolveStatistics {
@@ -470,7 +472,8 @@ public:
             sphere2(Vec3d(0, 0, 0), 2, Vec3d(0.352, 0.554, 0.663)),
             sphere_head(Vec3d(0, 0, 0), 2.1, COLOR_GRAY57),
             sphereForFixedPointRender(Vec3d(0, 0, 0), 0.07, Vec3d(0.5, 0.5, 0), 6),
-            plane1(Vec3d(0, 0, 5), Vec3d(-10, 0, -4), Vec3d(10, 0, -4), COLOR_GRAY50),
+            // plane1(Vec3d(0, 0, 5), Vec3d(-10, 0, -4), Vec3d(10, 0, -4), COLOR_GRAY50),
+            plane1(Vec3d(0, -3, 0), Vec3d(-10, -3, -10), Vec3d(10, -3, -10), COLOR_GRAY50),
             slope(Vec3d(0, -11, 10), Vec3d(-8, -1, -1), Vec3d(8, -1, -1), COLOR_GRAY50),
             printVerbose(true) {
 

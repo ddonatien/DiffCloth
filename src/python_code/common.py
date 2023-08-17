@@ -76,5 +76,3 @@ def forwardSimulation(sim, x_i, v_i, a_torch, getStateFunc, controller, simModul
         x_i, v_i = simModule(x_i, v_i,  a_torch)
     records.append((x_i, v_i))
     return records
-
- 

@@ -89,7 +89,7 @@ static std::vector<std::string> DEMOS_STRINGS = std::vector<std::string>{
 enum PrimitiveConfiguration {
     PLANE_BUST_WEARHAT,
     SLOPE,
-    SLOPE_SIMPLIEFIED,
+    SLOPE_SIMPLIFIED,
     PLANE_AND_SPHERE,
     FOOT,
     NONE,

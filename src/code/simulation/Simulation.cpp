@@ -25,6 +25,20 @@ double Simulation::windPhase = 0;
 double *Simulation::k_stiff_arr[Constraint::CONSTRAINT_NUM] = {&Spring::k_stiff, &AttachmentSpring::k_stiff,
                                                                &Triangle::k_stiff, &TriangleBending::k_stiff};
 
+void Simulation::BackwardTaskInformation::set_dL_dk_pertype(bool k1, bool k2, bool k3, bool k4) {
+      dL_dk_pertype[0] = k1;
+      dL_dk_pertype[1] = k2;
+      dL_dk_pertype[2] = k3;
+      dL_dk_pertype[3] = k4;
+}
+
+void Simulation::ParamInfo::set_k_pertype(double k1, double k2, double k3, double k4) {
+      k_pertype[0] = k1;
+      k_pertype[1] = k2;
+      k_pertype[2] = k3;
+      k_pertype[3] = k4;
+}
+
 Simulation::BackwardTaskInformation Simulation::taskConfigDefault = {.dL_dk_pertype = {false, false, false, false},
         .dL_density = false, .dL_dfext = false, .dL_dfwind = false, .adddr_dd = false,
         .dL_dcontrolPoints = false, .dL_dmu = false,
@@ -1031,7 +1045,7 @@ void Simulation::stepNN(int idx, const VecXd& x,const VecXd& v,const VecXd& fixe
   int fixedPointDofs = fixedPointPos.rows();
   int requiredDofs = sysMat[currentSysmatId].fixedPoints.size() * 3;
   if (fixedPointDofs != requiredDofs) {
-    Logging::logWarning("require" + std::to_string(requiredDofs) + " fixed point dofs but input fixed point dof is " + std::to_string(fixedPointDofs) + "\n");
+    Logging::logWarning("require " + std::to_string(requiredDofs) + " fixed point dofs but input fixed point dof is " + std::to_string(fixedPointDofs) + "\n");
   }
   rlFixedPointPos = fixedPointPos;
 
@@ -1040,6 +1054,7 @@ void Simulation::stepNN(int idx, const VecXd& x,const VecXd& v,const VecXd& fixe
   forwardRecords[forwardRecords.size()-1].stepIdx = idx;
 
 }
+
 void Simulation::step() {
    timeSteptimer = Timer();
   timeSteptimer.enabled = true;
@@ -1107,6 +1122,7 @@ void Simulation::step() {
   returnRecord.totalConverged = forwardRecords[forwardRecords.size() - 1].totalConverged;
 
 
+
   double curEnergy = 0;
   if (printOptimizationDetails) {
     curEnergy = evaluateSystemEnergy(v_n, x_n);
@@ -1159,9 +1175,7 @@ void Simulation::step() {
 
   }
 
-
   timeSteptimer.toc();
-
 
   {
 
@@ -1176,7 +1190,6 @@ void Simulation::step() {
     VecXd M_times_sn = M * s_n;
     VecXd P_times_xn = sysMat[currentSysmatId].P * x_n;
     VecXd x_new_lastconverging = x_n, v_new_lastconverging = v_n;
-
 
     timeSteptimer.toc();
     PD_TOTAL_ITER = (-std::log10(forwardConvergenceThreshold)) * 150;
@@ -1809,7 +1822,8 @@ void Simulation::initScene() {
   switch (sceneConfig.primitiveConfig) {
 
     case Y0PLANE: {
-      primitives.push_back(&bowl);
+      // primitives.push_back(&bowl);
+      primitives.push_back(&plane1);
 
       for (Particle &p : particles) {
         p.velocity_init = p.velocity = Vec3d(0, -10, 0);
@@ -1839,7 +1853,7 @@ void Simulation::initScene() {
       break;
     }
 
-    case SLOPE_SIMPLIEFIED: {
+    case SLOPE_SIMPLIFIED: {
       primitives.push_back(&slope);
       break;
     }
@@ -1960,7 +1974,7 @@ void Simulation::initScene() {
       break;
     }
 
-    case SLOPE_SIMPLIEFIED: {
+    case SLOPE_SIMPLIFIED: {
       double zDist = std::abs(slope.center.z() - slope.upperLeft.z());
       double zGap = 5;
       double yGap = -2;

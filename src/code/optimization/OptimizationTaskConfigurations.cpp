@@ -315,7 +315,7 @@ Simulation::SceneConfiguration OptimizationTaskConfigurations::slopeSimplifiedSc
         .upVector = Vec3d(0, 1, 0.0).normalized(),
         .attachmentPoints = AttachmentConfigs::NO_ATTACHMENTS,
         .trajectory = TrajectoryConfigs::NO_TRAJECTORY,
-        .primitiveConfig = PrimitiveConfiguration::SLOPE_SIMPLIEFIED,
+        .primitiveConfig = PrimitiveConfiguration::SLOPE_SIMPLIFIED,
         .windConfig = WindConfig::NO_WIND,
         .camPos = Vec3d(-10.7, 2.6, 43.8),
         .camFocusPos = Vec3d(-0.9, -33.1, 25.6),

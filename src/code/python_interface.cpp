@@ -3,11 +3,13 @@
 #include <pybind11/stl.h>
 #include "simulation/Simulation.h"
 #include "engine/Constants.h"
+#include "engine/Macros.h"
 #include "optimization/OptimizationTaskConfigurations.h"
 #include "engine/RenderLoop.h"
 #include "engine/Debug.h"
 
 namespace py = pybind11;
+
 
 Simulation* makeSim(std::string exampleName, bool runBackward = true) {
   Simulation::forwardConvergenceThreshold = 1e-5;
@@ -89,6 +91,21 @@ Simulation* makeSim(std::string exampleName, bool runBackward = true) {
 }
 
 
+Simulation* makeSimFromConf(Simulation::SceneConfiguration sceneConfiguration, bool runBackward = true) {
+  Simulation::forwardConvergenceThreshold = 1e-5;
+  Simulation* sim = nullptr;
+
+  // create simulation instance
+  sim = Simulation::createSystem(sceneConfiguration,
+                                 Vec3d(0, 0, 0), runBackward);
+  // // define loss
+  // Vec3d bustCenter =
+  //         sim->sphere_head.center + Vec3d(0, sim->sphere_head.radius * 0.6, 0);
+  // Vec3d hatCenter = (sim->restShapeMinDim + sim->restShapeMaxDim) * 0.5;
+  // Vec3d translation = bustCenter - hatCenter;
+  // sim->taskLossInfo.targetTranslation = translation;
+  return sim;
+}
 
 OptimizeHelper* makeOptimizeHelperWithSim(std::string exampleName, Simulation* sim) {
   Simulation::forwardConvergenceThreshold = 1e-5;
@@ -99,7 +116,6 @@ OptimizeHelper* makeOptimizeHelperWithSim(std::string exampleName, Simulation* s
     helper = BackwardTaskSolver::getOptimizeHelperPointer(sim, Demos::DEMO_WEAR_HAT);
   } else if (exampleName == "wear_sock") {
     sim->setPrintVerbose(false);
-
     helper = BackwardTaskSolver::getOptimizeHelperPointer(sim, Demos::DEMO_WEAR_SOCK);
   } else if (exampleName == "wind_tshirt") {
     sim->setPrintVerbose(false);
@@ -142,7 +158,6 @@ OptimizeHelper* makeOptimizeHelper(std::string exampleName) {
   return makeOptimizeHelperWithSim(exampleName, sim);
 }
 
-
 void enableOpenMP(int n_threads = 5) {
   bool parallelizeEigen = true;
 
@@ -172,13 +187,96 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .value("WIND_FACTOR_PER_STEP", WindConfig::WIND_FACTOR_PER_STEP)
           .export_values();
 
+  // Constant
+  py::enum_<Orientation>(m, "Orientation")
+          .value("FRONT", Orientation::FRONT)
+          .value("DOWN", Orientation::DOWN)
+          .value("BACK", Orientation::BACK)
+          .value("CUSTOM_ORIENTATION", Orientation::CUSTOM_ORIENTATION)
+          .export_values();
+
+  // Constant
+  py::enum_<AttachmentConfigs>(m, "AttachmentConfigs")
+          .value("NO_ATTACHMENTS", AttachmentConfigs::NO_ATTACHMENTS)
+          .value("LEFT_RIGHT_CORNERS_2", AttachmentConfigs::LEFT_RIGHT_CORNERS_2)
+          .value("CUSTOM_ARRAY", AttachmentConfigs::CUSTOM_ARRAY)
+          .export_values();
+
+  // Constant
+  py::enum_<TrajectoryConfigs>(m, "TrajectoryConfigs")
+          .value("NO_TRAJECTORY", TrajectoryConfigs::NO_TRAJECTORY)
+          .value("CORNERS_2_UP", TrajectoryConfigs::CORNERS_2_UP)
+          .value("CORNERS_2_WEARHAT", TrajectoryConfigs::CORNERS_2_WEARHAT)
+          .value("CORNERS_1_WEARHAT", TrajectoryConfigs::CORNERS_1_WEARHAT)
+          .value("CORNERS_2_WEARSOCK", TrajectoryConfigs::CORNERS_2_WEARSOCK)
+          .value("FIXED_POINT_TRAJECTORY", TrajectoryConfigs::FIXED_POINT_TRAJECTORY)
+          .value("TRAJECTORY_DRESS_TWIRL", TrajectoryConfigs::TRAJECTORY_DRESS_TWIRL)
+          .value("PER_STEP_TRAJECTORY", TrajectoryConfigs::PER_STEP_TRAJECTORY)
+          .export_values();
+
+  // Constant
+  py::enum_<PrimitiveConfiguration>(m, "PrimitiveConfiguration")
+          .value("PLANE_BUST_WEARHAT", PrimitiveConfiguration::PLANE_BUST_WEARHAT)
+          .value("SLOPE", PrimitiveConfiguration::SLOPE)
+          .value("SLOPE_SIMPLIFIED", PrimitiveConfiguration::SLOPE_SIMPLIFIED)
+          .value("PLANE_AND_SPHERE", PrimitiveConfiguration::PLANE_AND_SPHERE)
+          .value("FOOT", PrimitiveConfiguration::FOOT)
+          .value("NONE", PrimitiveConfiguration::NONE)
+          .value("Y0PLANE", PrimitiveConfiguration::Y0PLANE)
+          .value("BIG_SPHERE", PrimitiveConfiguration::BIG_SPHERE)
+          .export_values();
+
+  // Constant
+  py::enum_<CameraFocusPointType>(m, "CameraFocusPointType")
+          .value("ORIGIN", CameraFocusPointType::ORIGIN)
+          .value("CLOTH_CENTER", CameraFocusPointType::CLOTH_CENTER)
+          .value("PRIM0CENTER", CameraFocusPointType::PRIM0CENTER)
+          .value("POINT", CameraFocusPointType::POINT)
+          .export_values();
+
+  // Macros
+  py::class_<AABB>(m, "AABB")
+           .def(py::init<Vec3d, Vec3d>());
 
   // Simulation::SceneConfiguration
   py::class_<Simulation::SceneConfiguration>(m, "SceneConfiguration")
-          .def_readwrite("timeStep", &Simulation::SceneConfiguration::timeStep)
+          .def(py::init<>())
+          .def_readwrite("fabric", &Simulation::SceneConfiguration::fabric)
+          .def_readwrite("orientation", &Simulation::SceneConfiguration::orientation)
+          .def_readwrite("upVector", &Simulation::SceneConfiguration::upVector)
+          .def_readwrite("attachmentPoints", &Simulation::SceneConfiguration::attachmentPoints)
+          .def_readwrite("customAttachmentVertexIdx", &Simulation::SceneConfiguration::customAttachmentVertexIdx)
+          .def_readwrite("trajectory", &Simulation::SceneConfiguration::trajectory)
+          .def_readwrite("primitiveConfig", &Simulation::SceneConfiguration::primitiveConfig)
           .def_readwrite("windConfig", &Simulation::SceneConfiguration::windConfig)
-          .def_readonly("stepNum", &Simulation::SceneConfiguration::stepNum)
-          .def_readwrite("customAttachmentVertexIdx", &Simulation::SceneConfiguration::customAttachmentVertexIdx);
+          .def_readwrite("camPos", &Simulation::SceneConfiguration::camPos)
+          .def_readwrite("camFocusPos", &Simulation::SceneConfiguration::camFocusPos)
+          .def_readwrite("sockLegOrientation", &Simulation::SceneConfiguration::sockLegOrientation)
+          .def_readwrite("camFocusPointType", &Simulation::SceneConfiguration::camFocusPointType)
+          .def_readwrite("sceneBbox", &Simulation::SceneConfiguration::sceneBbox)
+          .def_readwrite("timeStep", &Simulation::SceneConfiguration::timeStep)
+          .def_readwrite("stepNum", &Simulation::SceneConfiguration::stepNum)
+          .def_readwrite("forwardConvergenceThresh", &Simulation::SceneConfiguration::forwardConvergenceThresh)
+          .def_readwrite("backwardConvergenceThresh", &Simulation::SceneConfiguration::backwardConvergenceThresh)
+          .def_readwrite("name", &Simulation::SceneConfiguration::name);
+
+  // Simulation::FabricConfiguration
+  py::class_<Simulation::FabricConfiguration>(m, "FabricConfiguration")
+          .def(py::init<>())
+          .def_readwrite("clothDimX", &Simulation::FabricConfiguration::clothDimX)
+          .def_readwrite("clothDimY", &Simulation::FabricConfiguration::clothDimY)
+          .def_readwrite("k_stiff_stretching", &Simulation::FabricConfiguration::k_stiff_stretching)
+          .def_readwrite("k_stiff_bending", &Simulation::FabricConfiguration::k_stiff_bending)
+          .def_readwrite("gridNumX", &Simulation::FabricConfiguration::gridNumX)
+          .def_readwrite("gridNumY", &Simulation::FabricConfiguration::gridNumY)
+          .def_readwrite("density", &Simulation::FabricConfiguration::density)
+          .def_readwrite("keepOriginalScalePoint", &Simulation::FabricConfiguration::keepOriginalScalePoint)
+          .def_readwrite("isModel", &Simulation::FabricConfiguration::isModel)
+          .def_readwrite("custominitPos", &Simulation::FabricConfiguration::custominitPos)
+          .def_readwrite("initPosFile", &Simulation::FabricConfiguration::initPosFile)
+          .def_readwrite("fabricIdx", &Simulation::FabricConfiguration::fabricIdx)
+          .def_readwrite("color", &Simulation::FabricConfiguration::color)
+          .def_readwrite("name", &Simulation::FabricConfiguration::name);
 
   // Simulation::PrimitiveCollisionInformation
   py::class_<Simulation::PrimitiveCollisionInformation>(m, "PrimitiveCollisionInformation")
@@ -229,18 +327,20 @@ PYBIND11_MODULE(diffcloth_py, m) {
   // Simulation::BackwardTaskInformation
   py::class_<Simulation::BackwardTaskInformation>(m, "BackwardTaskInformation")
           .def_readonly("dL_dk_pertype", &Simulation::BackwardTaskInformation::dL_dk_pertype)
-          .def_readonly("dL_density", &Simulation::BackwardTaskInformation::dL_density)
-          .def_readonly("dL_dfext", &Simulation::BackwardTaskInformation::dL_dfext)
-          .def_readonly("dL_dfwind", &Simulation::BackwardTaskInformation::dL_dfwind)
-          .def_readonly("adddr_dd", &Simulation::BackwardTaskInformation::adddr_dd)
-          .def_readonly("dL_dcontrolPoints", &Simulation::BackwardTaskInformation::dL_dcontrolPoints)
-          .def_readonly("dL_dmu", &Simulation::BackwardTaskInformation::dL_dmu)
-          .def_readonly("dL_dx0", &Simulation::BackwardTaskInformation::dL_dx0)
-          .def_readonly("dL_dwindFactor", &Simulation::BackwardTaskInformation::dL_dwindFactor)
-          .def_readonly("forwardAccuracyLevel", &Simulation::BackwardTaskInformation::forwardAccuracyLevel)
-          .def_readonly("backwardAccuracyLevel", &Simulation::BackwardTaskInformation::backwardAccuracyLevel)
-          .def_readonly("randSeed", &Simulation::BackwardTaskInformation::randSeed)
-          .def_readonly("srandSeed", &Simulation::BackwardTaskInformation::srandSeed);
+          .def_readwrite("dL_density", &Simulation::BackwardTaskInformation::dL_density)
+          .def_readwrite("dL_dfext", &Simulation::BackwardTaskInformation::dL_dfext)
+          .def_readwrite("dL_dfwind", &Simulation::BackwardTaskInformation::dL_dfwind)
+          .def_readwrite("adddr_dd", &Simulation::BackwardTaskInformation::adddr_dd)
+          .def_readwrite("dL_dcontrolPoints", &Simulation::BackwardTaskInformation::dL_dcontrolPoints)
+          .def_readwrite("dL_dmu", &Simulation::BackwardTaskInformation::dL_dmu)
+          .def_readwrite("dL_dx0", &Simulation::BackwardTaskInformation::dL_dx0)
+          .def_readwrite("dL_dwindFactor", &Simulation::BackwardTaskInformation::dL_dwindFactor)
+          .def_readwrite("forwardAccuracyLevel", &Simulation::BackwardTaskInformation::forwardAccuracyLevel)
+          .def_readwrite("backwardAccuracyLevel", &Simulation::BackwardTaskInformation::backwardAccuracyLevel)
+          .def_readwrite("randSeed", &Simulation::BackwardTaskInformation::randSeed)
+          .def_readwrite("srandSeed", &Simulation::BackwardTaskInformation::srandSeed)
+          .def("set_dL_dk_pertype", &Simulation::BackwardTaskInformation::set_dL_dk_pertype, "set_dL_dk_pertype",
+               py::arg("k1"), py::arg("k2"), py::arg("k3"), py::arg("k4"));
 
   // Simulation::CorresPondenceTargetInfo
   py::class_<Simulation::CorresPondenceTargetInfo>(m, "CorresPondenceTargetInfo")
@@ -258,12 +358,15 @@ PYBIND11_MODULE(diffcloth_py, m) {
   // .def_readonly("target")
 
   py::class_<Simulation::ParamInfo>(m, "ParamInfo")
+          .def(py::init<>())
           .def_readwrite("x0", &Simulation::ParamInfo::x0)
           .def_readwrite("v0", &Simulation::ParamInfo::v0)
           .def_readwrite("f_ext", &Simulation::ParamInfo::f_ext)
           .def_readwrite("f_extwind", &Simulation::ParamInfo::f_extwind)
           .def_readwrite("density", &Simulation::ParamInfo::density)
-          .def_readonly("k_pertype", &Simulation::ParamInfo::k_pertype);
+          .def_readonly("k_pertype", &Simulation::ParamInfo::k_pertype)
+          .def("set_k_pertype", &Simulation::ParamInfo::set_k_pertype, "set_k_pertype",
+               py::arg("k1"), py::arg("k2"), py::arg("k3"), py::arg("k4"));
 
   // Primitive
   py::class_<Primitive> primitive(m, "Primitive");
@@ -304,10 +407,12 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readwrite("gradientClippingThreshold", &Simulation::gradientClippingThreshold)
           .def_property_readonly("ndof_u", &Simulation::getActionDim)
           .def_property_readonly("num_particles", &Simulation::getNumParticles)
-           .def_readwrite_static("forwardConvergenceThreshold", &Simulation::forwardConvergenceThreshold)
-           .def_readwrite_static("backwardConvergenceThreshold", &Simulation::backwardConvergenceThreshold)
+          .def_readwrite_static("forwardConvergenceThreshold", &Simulation::forwardConvergenceThreshold)
+          .def_readwrite_static("backwardConvergenceThreshold", &Simulation::backwardConvergenceThreshold)
           .def("resetSystem", static_cast<void (Simulation::*)()>(&Simulation::resetSystem),
                "reset the simulation")
+          .def("resetSystemWithParams", &Simulation::resetSystemWithParams, "reset the simulation with params",
+               py::arg("taskConfiguration"), py::arg("param"))
           .def("step", &Simulation::step,
                "forward one step")
           .def("getCurrentPosVelocityVec", &Simulation::getCurrentPosVelocityVec, "get posvel vecs")
@@ -365,6 +470,10 @@ PYBIND11_MODULE(diffcloth_py, m) {
                ;
 
   m.def("makeSim", &makeSim, "initialize a simulation instance", py::arg("exampleName"), py::arg("runBackward") = true);
+
+  m.def("makeSimFromConf", &makeSimFromConf,
+        "initialize a simulation instance from a scene configuration",
+        py::arg("sceneConfiguration"), py::arg("runBackward") = true);
 
   m.def("makeOptimizeHelper", &makeOptimizeHelper,
         "initialize an optimize helper", py::arg("exampleName") );
