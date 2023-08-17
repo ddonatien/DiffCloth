@@ -137,15 +137,15 @@ void BackwardTaskSolver::setLossFunctionInformationAndType(LossType &lossType, S
       lossInfo.targetTwirlHeight = 0.3;
       system->sceneConfig.name = "dressTwirl-" +  d2str(lossInfo.targetTwirlHeight, 5);
       lossInfo.loopPoints = {};
-      printf("Dress loop points:\n");
+      // printf("Dress loop points:\n");
       for (Particle &p : system->particles) {
         if (std::abs(p.pos_rest[1] - system->restShapeMinDim[1]) < 1.2) {
           lossInfo.loopPoints.insert(p.idx);
-          printf("%d,", p.idx);
+          // printf("%d,", p.idx);
         }
       }
       system->debugLoopPoints = lossInfo.loopPoints;
-      printf("\n");
+      // printf("\n");
       break;
     }
   }
