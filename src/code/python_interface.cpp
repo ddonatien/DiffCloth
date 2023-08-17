@@ -446,7 +446,7 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readonly("forward_steps", &OptimizeHelper::FORWARD_STEPS)
           .def_readonly("sim", &OptimizeHelper::system)
           .def_readonly("paramLogScaleTransformOn", &OptimizeHelper::paramLogScaleTransformOn)
-          .def_readonly("taskInfo", &OptimizeHelper::taskInfo)
+          .def_readwrite("taskInfo", &OptimizeHelper::taskInfo)
           .def_readonly("lossType", &OptimizeHelper::lossType)
           .def_readonly("lossInfo", &OptimizeHelper::lossInfo)
           .def_readonly("paramActual", &OptimizeHelper::param_actual)

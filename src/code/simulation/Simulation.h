@@ -473,7 +473,7 @@ public:
             sphere_head(Vec3d(0, 0, 0), 2.1, COLOR_GRAY57),
             sphereForFixedPointRender(Vec3d(0, 0, 0), 0.07, Vec3d(0.5, 0.5, 0), 6),
             // plane1(Vec3d(0, 0, 5), Vec3d(-10, 0, -4), Vec3d(10, 0, -4), COLOR_GRAY50),
-            plane1(Vec3d(0, -3, 0), Vec3d(-10, -3, -10), Vec3d(10, -3, -10), COLOR_GRAY50),
+            plane1(Vec3d(0, -6, 0), Vec3d(-10, -6, -10), Vec3d(10, -6, -10), COLOR_GRAY50),
             slope(Vec3d(0, -11, 10), Vec3d(-8, -1, -1), Vec3d(8, -1, -1), COLOR_GRAY50),
             printVerbose(true) {
 
