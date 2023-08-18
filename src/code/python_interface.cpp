@@ -2,6 +2,7 @@
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 #include "simulation/Simulation.h"
+#include "simulation/Constraint.h"
 #include "engine/Constants.h"
 #include "engine/Macros.h"
 #include "optimization/OptimizationTaskConfigurations.h"
@@ -321,7 +322,12 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readonly("converged", &Simulation::BackwardInformation::converged)
           .def_readonly("convergedAccum", &Simulation::BackwardInformation::convergedAccum)
           .def_readonly("backwardIters", &Simulation::BackwardInformation::backwardIters)
-          .def_readonly("backwardTotalIters", &Simulation::BackwardInformation::backwardTotalIters);
+          .def_readonly("backwardTotalIters", &Simulation::BackwardInformation::backwardTotalIters)
+          .def("numpy_dL_dk_pertype", [](py::object &obj) {
+            py::print("ArrayClass::numpy_view()");
+            Simulation::BackwardInformation &a = obj.cast<Simulation::BackwardInformation&>();
+            return py::array_t<double>({Constraint::CONSTRAINT_NUM}, {4}, a.dL_dk_pertype, obj);
+          };
 
 
   // Simulation::BackwardTaskInformation
