@@ -324,10 +324,9 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readonly("backwardIters", &Simulation::BackwardInformation::backwardIters)
           .def_readonly("backwardTotalIters", &Simulation::BackwardInformation::backwardTotalIters)
           .def("numpy_dL_dk_pertype", [](py::object &obj) {
-            py::print("ArrayClass::numpy_view()");
             Simulation::BackwardInformation &a = obj.cast<Simulation::BackwardInformation&>();
             return py::array_t<double>({Constraint::CONSTRAINT_NUM}, {4}, a.dL_dk_pertype, obj);
-          };
+          });
 
 
   // Simulation::BackwardTaskInformation
