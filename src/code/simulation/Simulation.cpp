@@ -1471,7 +1471,6 @@ Simulation::stepBackward(Simulation::BackwardTaskInformation &taskInfo, Simulati
                          const ForwardInformation &forwardInfo_new,
                          bool isStart, const VecXd &dL_dxinit, const VecXd &dL_dvinit) {
 
-  Logging::logColor("stepBackward\n", Logging::MAGENTA);
   if (gradientClipping) {
     double dL_dx_maxnorm = gradientClippingThreshold;
     if ( gradient_new.dL_dx.norm() > dL_dx_maxnorm * particles.size()) {
@@ -1693,10 +1692,8 @@ Simulation::stepBackward(Simulation::BackwardTaskInformation &taskInfo, Simulati
 
 
   for (int i = 0; i < Constraint::CONSTRAINT_NUM; i++) {
-    Logging::logColor("stepBackward - dL_dk " + std::to_string(taskInfo.dL_dk_pertype[i]) + "\n", Logging::MAGENTA);
 
     if (taskInfo.dL_dk_pertype[i]) {
-	Logging::logColor("stepBackward - dL_dk " + std::to_string(i) + " doing it\n", Logging::MAGENTA);
         VecXd dA_t_times_p_dk = forwardInfo_new.At_p_weightless_pertype[i];
         VecXd A_t_A_weightless_times_xnew = currentSysMat.A_t_times_A_pertype[i] * x_new;
         VecXd df_dk = sceneConfig.timeStep * dA_t_times_p_dk - sceneConfig.timeStep * A_t_A_weightless_times_xnew;
@@ -1708,9 +1705,7 @@ Simulation::stepBackward(Simulation::BackwardTaskInformation &taskInfo, Simulati
 
         VecXd dL_dk_perelem = u_star.cwiseProduct(rhs);
 
-	Logging::logColor("stepBackward - dL_dk " + std::to_string(i) + " value " + std::to_string(gradient_new.dL_dk_pertype[i] + dL_dk_new) +  "\n", Logging::MAGENTA);
         ret.dL_dk_pertype[i] = gradient_new.dL_dk_pertype[i] + dL_dk_new;
-	Logging::logColor("stepBackward - dL_dk " + std::to_string(i) + " value out " + std::to_string(ret.dL_dk_pertype[i]) +  "\n", Logging::MAGENTA);
 
     }
   }
@@ -1782,7 +1777,6 @@ Simulation::stepBackward(Simulation::BackwardTaskInformation &taskInfo, Simulati
 
   timeSteptimer.toc(); // gradients
   timeSteptimer.ticEnd();
-  Logging::logColor("stepBackward - Gradients finished\n", Logging::MAGENTA);
   ret.timer = timeSteptimer.getReportMicroseconds();
   ret.accumSolvePerformanceReport = Timer::addPerf(ret.timer.solvePerfReport,
                                                    gradient_new.accumSolvePerformanceReport);
