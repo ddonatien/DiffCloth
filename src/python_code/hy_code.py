@@ -137,8 +137,6 @@ def run_step2(x_fin1, v_fin1):
     target = grasp_point.copy()
     target[1] = grasp_point[1] + 4
     grasp_traj = get_grasp_traj(grasp_point, target, scene.stepNum)
-    # grasp_traj = np.tile(grasp_point, (scene.stepNum, 1))
-    # grasp_traj = torch.tensor(grasp_traj, dtype=torch.float32)
 
     x, v = stepSim(sim_mod, sim, (x_fin1.flatten(), v_fin1.flatten()), grasp_traj)
 
@@ -177,7 +175,6 @@ def run_step3(gp1_id, x_fin2, v_fin2):
 
     sim.resetSystemWithParams(helper.taskInfo, paramInfo)
 
-    # sim.resetSystem()
     state_info_init = sim.getStateInfo()
     pts = state_info_init.x.reshape(-1, 3)
 
@@ -193,17 +190,62 @@ def run_step3(gp1_id, x_fin2, v_fin2):
     grasp_trajs = torch.cat((grasp1_traj, grasp2_traj), dim=1)
 
     x, v = stepSim(sim_mod, sim, (x_fin2.flatten(), v_fin2.flatten()), grasp_trajs)
-    # x, v = stepSim(sim_mod, sim, (torch.tensor(state_info_init.x),
-    #                               torch.tensor(state_info_init.v)), grasp_trajs)
 
     return x, v, (gp1_id, gp2_id)
 
 
+def run_step4(gp_ids, x_fin3, v_fin3):
+    scene = get_default_scene()
+
+    scene.customAttachmentVertexIdx = [(0.0, gp_ids)]
+
+    sim = dfc.makeSimFromConf(scene)
+    sim.gradientClippingThreshold, sim.gradientClipping = 100.0, False
+    np.set_printoptions(precision=5)
+
+    dfc.enableOpenMP(n_threads=1)
+
+    helper = dfc.makeOptimizeHelper("inverse_design")
+    helper.taskInfo.dL_dx0 = True
+    helper.taskInfo.dL_density = False
+
+    sim.forwardConvergenceThreshold = 1e-3
+
+    sim_mod = pySim(sim, helper, True)
+
+    paramInfo = dfc.ParamInfo()
+    paramInfo.x0 = x_fin3.flatten().detach().cpu().numpy()
+
+    sim.resetSystemWithParams(helper.taskInfo, paramInfo)
+
+    state_info_init = sim.getStateInfo()
+    pts = state_info_init.x.reshape(-1, 3)
+
+    grasp_point_1 = pts[gp_ids[0]].copy()
+    target = grasp_point_1.copy()
+    print(target.shape, grasp_point_1.shape)
+    target[2] = grasp_point_1[2] - 5
+    grasp1_traj = get_grasp_traj(grasp_point_1, target, scene.stepNum)
+
+    grasp_point_2 = pts[gp_ids[1]].copy()[0]
+    target = grasp_point_2.copy()
+    print(target.shape, grasp_point_2.shape)
+    target[2] = grasp_point_2[2] - 5
+    grasp2_traj = get_grasp_traj(grasp_point_2, target, scene.stepNum)
+
+    grasp_trajs = torch.cat((grasp1_traj, grasp2_traj), dim=1)
+
+    x, v = stepSim(sim_mod, sim, (x_fin3.flatten(), v_fin3.flatten()), grasp_trajs)
+
+    return x, v, gp_ids
+
 if __name__=="__main__":
     x1, v1  = run_step1()
     x2, v2, gp_id  = run_step2(x1[-1], v1[-1])
-    x3, v4, gp_ids = run_step3(gp_id, x2[-1], v2[-1])
+    x3, v3, gp_ids = run_step3(gp_id, x2[-1], v2[-1])
+    x4, v4, gp_ids = run_step4(gp_ids, x3[-1], v3[-1])
     x1_np = torch.stack(x1).numpy()
     x2_np = torch.stack(x2).numpy()
     x3_np = torch.stack(x3).numpy()
-    full_x = np.concatenate((x1_np, x2_np, x3_np))
+    x4_np = torch.stack(x4).numpy()
+    full_x = np.concatenate((x1_np, x2_np, x3_np, x4_np))
