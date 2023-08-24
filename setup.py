@@ -38,8 +38,8 @@ class CMakeBuild(build_ext):
                       '-DPYTHON_EXECUTABLE=' + sys.executable]
 
         # cfg = 'Debug' if self.debug else 'Release'
-        cfg = 'Release'
-        # cfg = 'Debug'
+        # cfg = 'Release'
+        cfg = 'Debug'
         build_args = ['--config', cfg]
         if platform.system() == "Windows":
             cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]

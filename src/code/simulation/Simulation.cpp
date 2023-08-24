@@ -1400,7 +1400,9 @@ void Simulation::step() {
   }
 
   returnRecord.x = x_new;
+  std::cout<<"return Record "<<x_new.segment(45*3, 3)<<std::endl;
   returnRecord.v = v_new;
+  std::cout<<"return Record "<<v_new.segment(45*3, 3)<<std::endl;
   returnRecord.f = f;
   returnRecord.r = r;
   returnRecord.timer = timeSteptimer.getReportMicroseconds();
