@@ -157,8 +157,10 @@ std::pair<VecXd, VecXd> Simulation::getCurrentPosVelocityVec() const {
     }
   }
 
-  if (encounteredNAN)
+  if (encounteredNAN) {
     std::printf("WARNING: encountered NAN in getCurrentPosVelocityVec() %d\n", nanCount);
+    exit(0);
+  }
 
   return std::make_pair(pos, velocity);
 }
@@ -1400,9 +1402,7 @@ void Simulation::step() {
   }
 
   returnRecord.x = x_new;
-  std::cout<<"return Record "<<x_new.segment(45*3, 3)<<std::endl;
   returnRecord.v = v_new;
-  std::cout<<"return Record "<<v_new.segment(45*3, 3)<<std::endl;
   returnRecord.f = f;
   returnRecord.r = r;
   returnRecord.timer = timeSteptimer.getReportMicroseconds();
@@ -2923,6 +2923,7 @@ void Simulation::updateAreaMatrix() {
     int i2 = t.p2_idx;
 
     double A_avg = A_i / 3.0;
+    // std::cout << "A_avg = " << A_avg << std::endl;
     area_per_particles[i0] += A_avg;
     area_per_particles[i1] += A_avg;
     area_per_particles[i2] += A_avg;
@@ -2944,7 +2945,10 @@ void Simulation::updateAreaMatrix() {
 }
 
 void Simulation::updateMassMatrix() {
+  // std::cout<<"Area : "<<Area.sum()<<std::endl;
+  // std::cout<<"Density : "<<sceneConfig.fabric.density<<std::endl;
   M = Area * sceneConfig.fabric.density; // m = d * A
+  // std::cout<<"Mass :"<<M.sum()<<std::endl;
   M_inv = Area_inv * (1.0 / sceneConfig.fabric.density);
   for (Particle &p  : particles) {
     p.mass = p.area * sceneConfig.fabric.density;

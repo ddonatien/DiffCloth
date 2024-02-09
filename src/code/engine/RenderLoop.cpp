@@ -79,6 +79,7 @@ void RenderLoop::renderRecordsForSystem(Simulation *system, std::vector<Simulati
 
     currentFrame = std::min(currentFrame+1, N-1);
     isLastFrame = currentFrame == N-1;
+    std::this_thread::sleep_for(std::chrono::milliseconds(80));
 
   }
    glfwIconifyWindow(glfwWindow);

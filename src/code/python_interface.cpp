@@ -369,6 +369,7 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readwrite("f_ext", &Simulation::ParamInfo::f_ext)
           .def_readwrite("f_extwind", &Simulation::ParamInfo::f_extwind)
           .def_readwrite("density", &Simulation::ParamInfo::density)
+          .def_readwrite("control_points_spline", &Simulation::ParamInfo::controlPointSpline)
           .def_readonly("k_pertype", &Simulation::ParamInfo::k_pertype)
           .def("set_k_pertype", &Simulation::ParamInfo::set_k_pertype, "set_k_pertype",
                py::arg("k1"), py::arg("k2"), py::arg("k3"), py::arg("k4"));
@@ -392,7 +393,6 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readwrite("type", &Primitive::type)
           .def_readwrite("center", &Primitive::center)
           .def_readwrite("centerInit", &Primitive::centerInit)
-
           .def_readonly_static("primitiveTypeStrings", &Primitive::primitiveTypeStrings)
           .def("getMesh", &Primitive::getMesh, "getMesh", py::arg("cumulativeMesh"), py::arg("cumulativePos"), py::arg("center"), py::arg("frameIdx") )
           .def("getPointVec", &Primitive::getPointVec, "getPointVec")
