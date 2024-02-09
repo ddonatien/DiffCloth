@@ -1059,7 +1059,7 @@ void Simulation::stepNN(int idx, const VecXd& x,const VecXd& v,const VecXd& fixe
 }
 
 void Simulation::step() {
-   timeSteptimer = Timer();
+  timeSteptimer = Timer();
   timeSteptimer.enabled = true;
   timeSteptimer.ticStart();
   timeSteptimer.tic("init");
@@ -1125,7 +1125,6 @@ void Simulation::step() {
   returnRecord.totalConverged = forwardRecords[forwardRecords.size() - 1].totalConverged;
 
 
-
   double curEnergy = 0;
   if (printOptimizationDetails) {
     curEnergy = evaluateSystemEnergy(v_n, x_n);
@@ -1165,6 +1164,7 @@ void Simulation::step() {
     }
   }
 
+
   double t_spline = 0;
   if (!debugSkipfixedpointstep)
     t_spline = stepFixPoints(returnRecord.t);
@@ -1196,6 +1196,7 @@ void Simulation::step() {
 
     timeSteptimer.toc();
     PD_TOTAL_ITER = (-std::log10(forwardConvergenceThreshold)) * 150;
+
 
     for (int iterIdx = 0; iterIdx < PD_TOTAL_ITER; iterIdx++) {
 
@@ -1232,6 +1233,7 @@ void Simulation::step() {
                   sysMat[currentSysmatId].A_t_pertype[i] * projections_pertype[i] / std::sqrt(*(k_stiff_arr[i]));
         }
       }
+
 
       timeSteptimer.toc();
       timeSteptimer.tic("calc b");
@@ -1346,6 +1348,7 @@ void Simulation::step() {
       }
       bool converged = x_diff < CONVERGE_EPSILON;
       bool finished = converged || (iterIdx == PD_TOTAL_ITER - 1);
+
 
       if (converged) {
         // has converged
@@ -3549,12 +3552,20 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   }
 
 
-  if (taskConfiguration.dL_dcontrolPoints) {
-    for (int sysMatId = 0; sysMatId < sysMat.size(); sysMatId++) {
-      sysMat[sysMatId].controlPointSplines = param.controlPointSplines[sysMatId];
-    }
-  }
+  // std::cout<<"dL_dcontrolPoints"<<std::endl;
+  // std::cout<<"sysMat: "<<sysMat.size()<<std::endl;
+  // std::cout<<"sysMat cps: "<<sysMat[0].controlPointSplines.size()<<std::endl;
+  // std::cout<<"param: "<<param.controlPointSplines[0].size()<<std::endl;
+  // if (taskConfiguration.dL_dcontrolPoints) {
+  //   std::cout<<"Here"<<std::endl;
+  //   for (int sysMatId = 0; sysMatId < sysMat.size(); sysMatId++) {
+  //     std::cout<<sysMatId<<std::endl;
+  //     sysMat[sysMatId].controlPointSplines = param.controlPointSplines[sysMatId];
+  //      std::cout<<"There"<<std::endl;
+  //   }
+  // }
 
+  // std::cout<<"A"<<std::endl;
 
   if (taskConfiguration.dL_dmu) {
     for (std::pair<int, double> &primInfo : param.mu) {
@@ -3580,6 +3591,7 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   resetSystem();
 
 
+
   if (taskConfiguration.dL_dx0) { // for rest shape param, set it after all resets have been finished
     forwardRecords[0].x = param.x0;
     for (Particle &p : particles) {
@@ -3590,6 +3602,7 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
     std::printf("WARNING: NAN encountered after reset: x: %.4f v: %.4f\n", forwardRecords[0].x.norm(),
                 forwardRecords[0].v.norm());
   }
+
 
   // reset record
   restoreToSingleRecordFromCurrentState();

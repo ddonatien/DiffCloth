@@ -369,7 +369,7 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readwrite("f_ext", &Simulation::ParamInfo::f_ext)
           .def_readwrite("f_extwind", &Simulation::ParamInfo::f_extwind)
           .def_readwrite("density", &Simulation::ParamInfo::density)
-          .def_readwrite("control_points_spline", &Simulation::ParamInfo::controlPointSpline)
+          .def_readwrite("control_point_splines", &Simulation::ParamInfo::controlPointSplines)
           .def_readonly("k_pertype", &Simulation::ParamInfo::k_pertype)
           .def("set_k_pertype", &Simulation::ParamInfo::set_k_pertype, "set_k_pertype",
                py::arg("k1"), py::arg("k2"), py::arg("k3"), py::arg("k4"));
@@ -455,6 +455,7 @@ PYBIND11_MODULE(diffcloth_py, m) {
           .def_readonly("lossType", &OptimizeHelper::lossType)
           .def_readonly("lossInfo", &OptimizeHelper::lossInfo)
           .def_readonly("paramActual", &OptimizeHelper::param_actual)
+          .def_readonly("paramGuess", &OptimizeHelper::param_guess)
           .def("getActualParam", &OptimizeHelper::getActualParam,
                "getactualparam")
           .def("getRandomParam", &OptimizeHelper::getRandomParam,
