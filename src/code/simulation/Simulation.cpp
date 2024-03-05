@@ -2472,6 +2472,7 @@ void Simulation::updateCollisionRadii() {
 }
 
 void Simulation::restoreToSingleRecordFromCurrentState() {
+  std::cout<<"restore A"<<std::endl;
   std::pair<VecXd, VecXd> posVelVec = getCurrentPosVelocityVec();
 
   x_n = posVelVec.first;
@@ -2490,6 +2491,7 @@ void Simulation::restoreToSingleRecordFromCurrentState() {
     x_primitives.segment(i * 3, 3) = primitives[i]->center;
 
 
+  std::cout<<"restore B"<<std::endl;
   ForwardInformation singleRecord = {};
   singleRecord.t = 0;
   singleRecord.sysMatId = 0;
@@ -2509,9 +2511,11 @@ void Simulation::restoreToSingleRecordFromCurrentState() {
   singleRecord.x_prim = x_primitives;
   singleRecord.avgDeformation = calculateTriangleDeformation(x_n);
 
+  std::cout<<"restore C"<<std::endl;
   if (!sysMat[0].controlPointSplines.empty())
     singleRecord.splines = sysMat[0].controlPointSplines;
 
+  std::cout<<"restore D"<<std::endl;
   forwardRecords = {singleRecord};
 
 }
@@ -2827,6 +2831,7 @@ Simulation::createSystem(SceneConfiguration sceneConfig,
 
 void Simulation::resetParticlesAndPrimitivesToRestPose() {
   // reset particles
+  std::cout<<"A"<<std::endl;
   for (Particle &p : particles) {
     p.pos = p.pos_init;
     p.velocity = p.velocity_init;
@@ -2837,6 +2842,7 @@ void Simulation::resetParticlesAndPrimitivesToRestPose() {
     }
   }
 
+  std::cout<<"B"<<std::endl;
   for (FixedPoint &p: sysMat[0].fixedPoints) {
     p.pos = p.pos_rest;
     if (std::isnan(p.pos.norm())) {
@@ -2847,6 +2853,7 @@ void Simulation::resetParticlesAndPrimitivesToRestPose() {
   }
 
   //reset primitives
+  std::cout<<"C"<<std::endl;
   for (Primitive *p : primitives) {
     p->reset();
   }
@@ -2856,9 +2863,11 @@ void Simulation::resetSystem() {
   std::cout<<"ResetSystem()"<<std::endl;
   std::cout<<sysMat.size()<<std::endl;
   // reset particle state and mass matrix
+  std::cout<<"resetParticles...()"<<std::endl;
   resetParticlesAndPrimitivesToRestPose();
 
   // reset record
+  std::cout<<"restoreTo...()"<<std::endl;
   restoreToSingleRecordFromCurrentState();
   // reset states
   currentSysmatId = 0;
