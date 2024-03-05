@@ -2479,8 +2479,10 @@ void Simulation::restoreToSingleRecordFromCurrentState() {
   v_n = posVelVec.second;
 
 
+  std::cout<<particles.size()<<std::end;
   VecXd empty(3 * particles.size());
   empty.setZero();
+  std::cout<<sysMat[0].fixedPoints.size()<<std::end;
   VecXd x_fixedpoints(3 * sysMat[0].fixedPoints.size());
   for (int i = 0; i < sysMat[0].fixedPoints.size(); i++)
     x_fixedpoints.segment(i * 3, 3) = sysMat[0].fixedPoints[i].pos;
