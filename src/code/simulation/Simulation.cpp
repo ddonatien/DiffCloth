@@ -3542,10 +3542,13 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   std::cout<<coutctr<<std::endl;
   coutctr++;
   if (constraintChanged) {
+    std::cout<<sysMat.size()<<std::endl;
     for (SystemMatrix &sys : sysMat) {
       std::cout<<"Here"<<std::endl;
+      std::cout<<sysMat.constraints.size()<<std::endl;
       for (Constraint *c: sys.constraints) {
-        std::cout<<"There "<<c->constraintNum<<std::endl;
+        std::cout<<"There"<<std::endl;
+        std::cout<<c->constraintNum<<std::endl;
         c->setConstraintWeight();
       }
     }
