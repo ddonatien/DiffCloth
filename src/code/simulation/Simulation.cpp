@@ -3512,6 +3512,20 @@ Simulation::calculateLossAndGradient(LossType &lossType, Simulation::LossInfo &l
 void
 Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfiguration,
                                   Simulation::ParamInfo &param) {
+
+  std::cout<<dL_density<<std::endl;
+  std::cout<<dL_dfext<<std::endl;
+  std::cout<<dL_dconstantForceField<<std::endl;
+  std::cout<<dL_dfwind<<std::endl;
+  std::cout<<adddr_dd<<std::endl;
+  std::cout<<dL_dcontrolPoints<<std::endl;
+  std::cout<<dL_dxfixed<<std::endl;
+  std::cout<<dL_dmu<<std::endl;
+  std::cout<<dL_dx0<<std::endl;
+  std::cout<<dL_dwindFactor<<std::endl;
+  std::cout<<forwardAccuracyLevel<<std::endl;
+  std::cout<<backwardAccuracyLevel<<std::endl;
+
   bool PmatrixChanged = false;
   bool constraintChanged = false;
   for (int i = 0; i < Constraint::CONSTRAINT_NUM; i++) {
