@@ -248,7 +248,7 @@ public:
 
     void reinitScene() {
       std::printf("Reinit Scene called\n");
-      for (std::sahred_ptr<Simulation> s : simSystems) {
+      for (std::shared_ptr<Simulation> s : simSystems) {
         s->initScene();
       }
       camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
