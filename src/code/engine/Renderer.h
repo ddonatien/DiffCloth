@@ -83,7 +83,7 @@ public:
                               Vec3d color);
 
     static void
-    stepAndRenderSystem(Simulation *msSystem, Shader *clothShader, Shader *simpleShader, Viewer &viewer,
+    stepAndRenderSystem(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Shader *simpleShader, Viewer &viewer,
                         std::vector<Simulation::ForwardInformation> &recordToUse, int recordIdx,
                         bool isGroundTruthSystem = false);
 };

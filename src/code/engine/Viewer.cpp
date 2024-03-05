@@ -948,7 +948,7 @@ void Viewer::addCameraControlWidgets() {
 
 }
 
-void Viewer::addSystems(std::vector<Simulation *> systems) {
+void Viewer::addSystems(std::vector<std::shared_ptr<Simulation>> systems) {
   simSystems = systems;
 }
 

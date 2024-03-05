@@ -30,7 +30,7 @@ public:
 
     Simulation::LossInfo lossInfo;
     Simulation::BackwardTaskInformation taskInfo;
-    Simulation *system;
+    std::shared_ptr<Simulation> system;
     Simulation::TaskSolveStatistics statistics;
     std::string experimentName;
 

@@ -581,7 +581,7 @@ void Renderer::renderPrimitives(std::vector<Primitive*>& primitives, Shader* clo
     }
 }
 void
-Renderer::stepAndRenderSystem(Simulation *msSystem, Shader *clothShader, Shader *simpleShader, Viewer &viewer,
+Renderer::stepAndRenderSystem(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Shader *simpleShader, Viewer &viewer,
                               std::vector<Simulation::ForwardInformation> &recordToUse, int recordIdx,
                               bool isGroundTruthSystem) {
 
