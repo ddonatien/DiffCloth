@@ -8,18 +8,18 @@
 #include "OptimizationTaskSetup.h"
 
 
-void BackwardTaskSolver::solveDemo(Simulation *system, const std::function<void(const std::string &)> &setTextBoxCB,
+void BackwardTaskSolver::solveDemo(std::shared_ptr<Simulation> system, const std::function<void(const std::string &)> &setTextBoxCB,
                                    int demoNum, bool isRandom, int srandSeed) {
   OptimizeHelper helper = getOptimizeHelper(system, demoNum);
 
   helper.taskInfo.optimizer = Optimizer::LBFGS;
-  optimizeLBFGS(system,helper, system->sceneConfig.stepNum, demoNum, isRandom, srandSeed, setTextBoxCB);
+  optimizeLBFGS(system, helper, system->sceneConfig.stepNum, demoNum, isRandom, srandSeed, setTextBoxCB);
 
 
 }
 
 
-void BackwardTaskSolver::optimizeLBFGS(Simulation *system, OptimizeHelper& helper,
+void BackwardTaskSolver::optimizeLBFGS(std::shared_ptr<Simulation> system, OptimizeHelper& helper,
                                        int FORWARD_STEPS, int demoNum, bool isRandom,
                                        int srandSeed, const std::function<void(const std::string &)> &setTextBoxCB) {
 
@@ -66,7 +66,7 @@ void BackwardTaskSolver::optimizeLBFGS(Simulation *system, OptimizeHelper& helpe
 }
 
 
-std::shared_ptr<OptimizeHelper> BackwardTaskSolver::getOptimizeHelperPointer(Simulation *system, int demoNum) {
+std::shared_ptr<OptimizeHelper> BackwardTaskSolver::getOptimizeHelperPointer(std::shared_ptr<Simulation> system, int demoNum) {
   Logging::logOk("getOptimizeHelperPointer for task" +  DEMOS_STRINGS[demoNum] + "\n");
   OptimizeHelper helper = getOptimizeHelper(system, demoNum);
 
@@ -74,7 +74,7 @@ std::shared_ptr<OptimizeHelper> BackwardTaskSolver::getOptimizeHelperPointer(Sim
                                           helper.system->sceneConfig.stepNum, helper.param_actual);
 }
 
-OptimizeHelper BackwardTaskSolver::getOptimizeHelper(Simulation *system, int demoNum) {
+OptimizeHelper BackwardTaskSolver::getOptimizeHelper(std::shared_ptr<Simulation> system, int demoNum) {
   if (demoNum == Demos::DEMO_WIND_SIM2REAL) {
     std::string folder = std::string(SOURCE_PATH) + "/src/assets/animation/flag-ryanwhite";
     std::vector<std::string>  frameFileNames = listFiles(folder, ".obj");

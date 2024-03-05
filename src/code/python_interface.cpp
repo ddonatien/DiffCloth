@@ -12,9 +12,9 @@
 namespace py = pybind11;
 
 
-Simulation* makeSim(std::string exampleName, bool runBackward = true) {
+std::shared_ptr<Simulation> makeSim(std::string exampleName, bool runBackward = true) {
   Simulation::forwardConvergenceThreshold = 1e-5;
-  Simulation* sim = nullptr;
+  std::shared_ptr<Simulation> sim = nullptr;
   if (exampleName == "wear_hat") {
     // create simulation instance
     Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
@@ -92,9 +92,9 @@ Simulation* makeSim(std::string exampleName, bool runBackward = true) {
 }
 
 
-Simulation* makeSimFromConf(Simulation::SceneConfiguration sceneConfiguration, bool runBackward = true) {
+std::shared_ptr<Simulation> makeSimFromConf(Simulation::SceneConfiguration sceneConfiguration, bool runBackward = true) {
   Simulation::forwardConvergenceThreshold = 1e-5;
-  Simulation* sim = nullptr;
+  std::shared_ptr<Simulation> sim = nullptr;
 
   // create simulation instance
   sim = Simulation::createSystem(sceneConfiguration,
@@ -108,9 +108,9 @@ Simulation* makeSimFromConf(Simulation::SceneConfiguration sceneConfiguration, b
   return sim;
 }
 
-OptimizeHelper* makeOptimizeHelperWithSim(std::string exampleName, Simulation* sim) {
+std::shared_ptr<OptimizeHelper> makeOptimizeHelperWithSim(std::string exampleName, std::shared_ptr<Simulation> sim) {
   Simulation::forwardConvergenceThreshold = 1e-5;
-  OptimizeHelper* helper = nullptr;
+  std::shared_ptr<OptimizeHelper> helper = nullptr;
   std::cerr << "example Name: " << exampleName << std::endl;
   if (exampleName == "wear_hat") {
     sim->setPrintVerbose(false);
@@ -151,11 +151,10 @@ OptimizeHelper* makeOptimizeHelperWithSim(std::string exampleName, Simulation* s
   return helper;
 }
 
-OptimizeHelper* makeOptimizeHelper(std::string exampleName) {
+std::shared_ptr<OptimizeHelper> makeOptimizeHelper(std::string exampleName) {
   Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
-  Simulation* sim  = Simulation::createSystem(
-                                              initSceneProfile,
-                                              Vec3d(0, 0, 0), false);
+  std::shared_ptr<Simulation> sim  = Simulation::createSystem(initSceneProfile,
+                                                              Vec3d(0, 0, 0), false);
   return makeOptimizeHelperWithSim(exampleName, sim);
 }
 

@@ -19,9 +19,8 @@ Viewer window;
 
 void runBackwardTask(int demoIdx, bool isRandom, int srandSeed) {
   Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
-  Simulation *clothSystem = Simulation::createSystem(
-                                                     initSceneProfile,
-                                                     Vec3d(0, 0, 0), true);
+  std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
+                                                                     Vec3d(0, 0, 0), true);
 
   BackwardTaskSolver::solveDemo(clothSystem, [&](const std::string &v) {}, demoIdx, isRandom,
                                 srandSeed);
@@ -32,9 +31,8 @@ void runBackwardTask(int demoIdx, bool isRandom, int srandSeed) {
 
 void renderFromFolder(int demoIdx,  std::string subFolder) {
   Simulation::TaskConfiguration taskConfig = OptimizationTaskConfigurations::demoNumToConfigMap[demoIdx];
-  Simulation *clothSystem = Simulation::createSystem(
-                                                     taskConfig.scene,
-                                                     Vec3d(0, 0, 0), true);
+  std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(taskConfig.scene,
+                                                                     Vec3d(0, 0, 0), true);
   clothSystem->resetForwardRecordsFromFolder(subFolder);
 
   RenderLoop::renderRecordsForSystem(clothSystem, clothSystem->forwardRecords, false, true,

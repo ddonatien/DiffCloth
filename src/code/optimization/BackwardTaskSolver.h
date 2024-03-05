@@ -19,39 +19,38 @@
 class BackwardTaskSolver {
 public:
     static void
-    optimizeLBFGS(Simulation *system, OptimizeHelper& helper,
+    optimizeLBFGS(std::shared_ptr<Simulation> system, OptimizeHelper& helper,
                   int FORWARD_STEPS,  int demoNum, bool isRandom,
                   int srandSeed, const std::function<void(const std::string &)> &setTextBoxCB);
 
 
 
-    static void setWindSim2realInitialParams(
-                                             Simulation::ParamInfo &paramGroundtruth,
-                                             Simulation::BackwardTaskInformation &taskInfo, Simulation *system);
+    static void setWindSim2realInitialParams(Simulation::ParamInfo &paramGroundtruth,
+                                             Simulation::BackwardTaskInformation &taskInfo, std::shared_ptr<Simulation> system);
 
-    static void setDemoSceneConfigAndConvergence(Simulation* system, int demoNum, Simulation::BackwardTaskInformation &taskInfo);
+    static void setDemoSceneConfigAndConvergence(std::shared_ptr<Simulation> system, int demoNum, Simulation::BackwardTaskInformation &taskInfo);
 
-    static void resetSplineConfigsForControlTasks(int demoNum, Simulation *system,
+    static void resetSplineConfigsForControlTasks(int demoNum, std::shared_ptr<Simulation> system,
                                                   Simulation::ParamInfo &paramGroundtruth);
 
  
 
     static void
-    setLossFunctionInformationAndType(LossType &lossType, Simulation::LossInfo &lossInfo, Simulation *system,
+    setLossFunctionInformationAndType(LossType &lossType, Simulation::LossInfo &lossInfo, std::shared_ptr<Simulation> system,
                                       int demoNum);
 
 
     static void
-    setInitialConditions(int demoNum, Simulation *system,
+    setInitialConditions(int demoNum, std::shared_ptr<Simulation> system,
                          Simulation::ParamInfo &paramGroundtruth, Simulation::BackwardTaskInformation &taskInfo);
 
     static void
-    solveDemo(Simulation *system, const std::function<void(const std::string &)> &setTextBoxCB,
+    solveDemo(std::shared_ptr<Simulation> system, const std::function<void(const std::string &)> &setTextBoxCB,
               int demoNum, bool isRandom, int srandSeed);
 
-    static OptimizeHelper getOptimizeHelper(Simulation *system, int demoNum);
+    static OptimizeHelper getOptimizeHelper(std::shared_ptr<Simulation> system, int demoNum);
 
-    static OptimizeHelper *getOptimizeHelperPointer(Simulation *system, int demoNum);
+    static std::shared_ptr<OptimizeHelper> getOptimizeHelperPointer(std::shared_ptr<Simulation> system, int demoNum);
 
 };
 

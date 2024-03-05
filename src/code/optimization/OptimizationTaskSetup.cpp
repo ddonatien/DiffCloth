@@ -7,7 +7,8 @@
 #include <LBFGSB.h>
 #include "OptimizationTaskSetup.h"
 
-void BackwardTaskSolver::setDemoSceneConfigAndConvergence(Simulation* system, int demoNum, Simulation::BackwardTaskInformation &taskInfo) {
+void BackwardTaskSolver::setDemoSceneConfigAndConvergence(std::shared_ptr<Simulation> system, int demoNum,
+                                                          Simulation::BackwardTaskInformation &taskInfo) {
 
 
   system->sceneConfig = OptimizationTaskConfigurations::demoNumToConfigMap[demoNum].scene;
@@ -20,7 +21,7 @@ void BackwardTaskSolver::setDemoSceneConfigAndConvergence(Simulation* system, in
 
 void BackwardTaskSolver::setWindSim2realInitialParams(Simulation::ParamInfo &paramActual,
                                                       Simulation::BackwardTaskInformation &taskInfo,
-                                                      Simulation *system) {
+                                                      std::shared_ptr<Simulation> system) {
     system->sceneConfig.windConfig = WIND_SIN_AND_FALLOFF;
     taskInfo.dL_dfwind = true;
     paramActual.f_extwind.segment(0, 3) = Vec3d(1, 0.1, 1.0).normalized() * 1;
@@ -35,7 +36,7 @@ void BackwardTaskSolver::setWindSim2realInitialParams(Simulation::ParamInfo &par
 
 }
 
-void BackwardTaskSolver::resetSplineConfigsForControlTasks(int demoNum, Simulation *system,
+void BackwardTaskSolver::resetSplineConfigsForControlTasks(int demoNum, std::shared_ptr<Simulation> system,
                                                            Simulation::ParamInfo &paramActual) {
 for (Spline &s: system->sysMat[0].controlPointSplines) {
         s.type = Spline::ENDPOINT_AND_TANGENTS;
@@ -48,7 +49,7 @@ for (Spline &s: system->sysMat[0].controlPointSplines) {
  
 
 void BackwardTaskSolver::setLossFunctionInformationAndType(LossType &lossType, Simulation::LossInfo &lossInfo,
-                                                           Simulation *system, int demoNum) {
+                                                           std::shared_ptr<Simulation> system, int demoNum) {
     if (OptimizationTaskConfigurations::demoNumToConfigMap[demoNum].generateGroundtruthSimulation)
         lossInfo.targetSimulation = system->groundTruthForwardRecords;
     lossType = OptimizationTaskConfigurations::demoNumToConfigMap[demoNum].lossType;
@@ -151,7 +152,7 @@ void BackwardTaskSolver::setLossFunctionInformationAndType(LossType &lossType, S
   }
 }
 
-void BackwardTaskSolver::setInitialConditions(int demoNum, Simulation *system,
+void BackwardTaskSolver::setInitialConditions(int demoNum, std::shared_ptr<Simulation> system,
                                               Simulation::ParamInfo &paramGroundtruth,
                                               Simulation::BackwardTaskInformation &taskInfo) {
   switch (demoNum) {
