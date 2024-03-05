@@ -12,7 +12,7 @@ VecXd OptimizeHelper::getLowerBound() {
   return lb;
 }
 
-OptimizeHelper::OptimizeHelper(Demos demoNum, Simulation *system, Simulation::LossInfo &lossInfo,
+OptimizeHelper::OptimizeHelper(Demos demoNum, std::shared_ptr<Simulation> system, Simulation::LossInfo &lossInfo,
                                Simulation::BackwardTaskInformation &taskInfo, LossType lossType, int FORWARD_STEPS, Simulation::ParamInfo paramActual)
         : demoNum(demoNum), system(system), lossInfo(lossInfo), taskInfo(taskInfo), lossType(lossType),
           FORWARD_STEPS(FORWARD_STEPS),  param_actual(paramActual) {

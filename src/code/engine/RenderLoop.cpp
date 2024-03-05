@@ -11,7 +11,7 @@ Shader* RenderLoop::clothShader = nullptr;
 Shader* RenderLoop::simpleShader = nullptr;
 Viewer RenderLoop::viewer = Viewer(true);
 GLFWwindow* RenderLoop::glfwWindow = nullptr;
-void RenderLoop::renderRecordsForSystem(Simulation *system, std::vector<Simulation::ForwardInformation> &forwardRecords,
+void RenderLoop::renderRecordsForSystem(std::shared_ptr<Simulation> system, std::vector<Simulation::ForwardInformation> &forwardRecords,
                                         bool renderPosPairs, bool exitOnLastFrame, std::string text) {
 
   if (!initialized) {

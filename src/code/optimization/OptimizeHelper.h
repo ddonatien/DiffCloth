@@ -57,7 +57,7 @@ public:
     Offsets offset = {};
 
 
-    OptimizeHelper(Demos demoNum, Simulation *system, Simulation::LossInfo &lossInfo,
+    OptimizeHelper(Demos demoNum, std::shared_ptr<Simulation> system, Simulation::LossInfo &lossInfo,
                    Simulation::BackwardTaskInformation &taskInfo, LossType lossType, int FORWARD_STEPS,
                     Simulation::ParamInfo paramActual);
 

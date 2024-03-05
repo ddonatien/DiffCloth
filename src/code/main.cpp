@@ -26,7 +26,7 @@ void runBackwardTask(int demoIdx, bool isRandom, int srandSeed) {
                                 srandSeed);
 
 
-  delete clothSystem;
+  // delete clothSystem;
 }
 
 void renderFromFolder(int demoIdx,  std::string subFolder) {
@@ -38,7 +38,7 @@ void renderFromFolder(int demoIdx,  std::string subFolder) {
   RenderLoop::renderRecordsForSystem(clothSystem, clothSystem->forwardRecords, false, true,
                                      "Set text here for whatever you need (only single line is supported): Visualization for pySimulations::runExample");
 
-  delete clothSystem;
+  // delete clothSystem;
 }
 
 char *getCmdOption(char **begin, char **end, const std::string &option) {

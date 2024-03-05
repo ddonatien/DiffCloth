@@ -22,7 +22,7 @@ public:
     static GLFWwindow *glfwWindow;
 
     static void
-    renderRecordsForSystem(Simulation *system, std::vector<Simulation::ForwardInformation> &forwardRecords,
+    renderRecordsForSystem(std::shared_ptr<Simulation> system, std::vector<Simulation::ForwardInformation> &forwardRecords,
                            bool renderPosPairs = false, bool exitOnLastFrame = false,
                            std::string text = "You can set text for your convenience");
 

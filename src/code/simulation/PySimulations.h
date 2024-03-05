@@ -108,7 +108,7 @@ public:
 //                                                                                                  false);
       // Backproped control points gradient is at backwardRecords[0].dL_dsplines
 
-      delete clothSystem;
+      // delete clothSystem;
     }
 
 
