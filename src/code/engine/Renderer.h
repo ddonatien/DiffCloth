@@ -31,9 +31,9 @@ public:
       }
     }
 
-    static void useClothShaderAndSetUniforms(Simulation *msSystem, Shader *clothShader, Viewer &window);
+    static void useClothShaderAndSetUniforms(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window);
 
-    static void useSimpleShaderAndSetUniforms(Simulation *msSystem, Shader *simpleShader, Viewer &window);
+    static void useSimpleShaderAndSetUniforms(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window);
 
     static void
     fillTriangleToVertexArr(Triangle &m, float *vertexArr, int offset, int numFields, Vec3d color, Vec3d center,
@@ -57,29 +57,29 @@ public:
 
 
     static void
-    renderMesh(Simulation *msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, Vec3d color,
+    renderMesh(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, Vec3d color,
                std::vector<Vec3d> center, Vec3d initialDir = Vec3d(0, 0, 0), Vec3d pointDir = Vec3d(0, 0, 0),
                bool shading = false, bool lighting = false);
 
     static void renderPrimitive(Primitive& p, Shader* shader, Vec3d center);
     static void renderPrimitives(std::vector<Primitive*>& primitives, Shader* clothShader,  int recordIdx, Vec3d center);
-    static void renderLines(Simulation *msSystem, Shader *simpleShader, Viewer &window, const std::vector<std::pair<Vec3d, Vec3d>> &lines);
-    static void renderLines(Simulation *msSystem, Shader *simpleShader, Viewer &window, const std::vector<std::pair<Vec3d, Vec3d>> &lines, Vec3d color);
-    static void  renderNormals(Simulation *msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, std::vector<std::pair<Vec3d, Vec3d>> &pointsAndDirs, Vec3d initialDir);
+    static void renderLines(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window, const std::vector<std::pair<Vec3d, Vec3d>> &lines);
+    static void renderLines(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window, const std::vector<std::pair<Vec3d, Vec3d>> &lines, Vec3d color);
+    static void  renderNormals(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, std::vector<std::pair<Vec3d, Vec3d>> &pointsAndDirs, Vec3d initialDir);
     static void
-    renderMesh(Simulation *msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, Vec3d color,
+    renderMesh(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, Vec3d color,
                Vec3d center, Vec3d initialDir = Vec3d(0, 0, 0), Vec3d pointDir = Vec3d(0, 0, 0), bool shading = false,
                bool lighting = false) {
       std::vector<Vec3d> singleton = {center};
       renderMesh(msSystem, clothShader, window, model, color, singleton, initialDir, pointDir, shading, lighting);
     }
 
-    static void renderFixedPoints(Simulation *msSystem, Shader *clothShader, Viewer &window, std::vector<Vec3d> &points,
+    static void renderFixedPoints(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, std::vector<Vec3d> &points,
                                   Vec3d color, bool renderClips = false, bool useHashColor = false);
 
-    static void renderGrid(Simulation *msSystem, Shader *simpleShader, Viewer &window);
+    static void renderGrid(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window);
 
-    static void renderSplines(Simulation *msSystem, Shader *clothShader, Viewer &window, std::vector<Spline> &splines,
+    static void renderSplines(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, std::vector<Spline> &splines,
                               Vec3d color);
 
     static void

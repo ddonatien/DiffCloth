@@ -410,7 +410,7 @@ void Viewer::updateCameraDependentWidgetPoses() {
 
 void Viewer::resetAllSimulation() {
   std::printf("Reset All Simulation Called\n");
-  for (Simulation *s : simSystems) { s->resetSystem(); }
+  for (std::shared_ptr<Simulation> s : simSystems) { s->resetSystem(); }
   playBackId = 0;
   forwardFrameSliderText.slider->setValue(0);
   forwardFrameSliderText.slider->callback()(forwardFrameSliderText.slider->value());
@@ -429,7 +429,7 @@ void Viewer::setupNanogui() {
     simulationInfoTextBox->setEnabled(true);
     simulationInfoTextBox->setVisible(true);
   } else {
-    for (Simulation *sim : simSystems) {
+    for (std::shared_ptr<Simulation> sim : simSystems) {
       symPosCenters.emplace_back(sim->systemCenter + sim->sphere5.center + Vec3d(0, 21, 0));
     }
 
@@ -745,7 +745,7 @@ void Viewer::addSceneControlWidgets() {
 
   timeStepSetter = SettingsControl->addVariable<int>("timeStep",
                                                      [&](const int &v) {
-                                                         for (Simulation *s : simSystems) {
+                                                         for (std::shared_ptr<Simulation> s : simSystems) {
                                                            s->sceneConfig.timeStep = 1.0 / v;
                                                            s->initializePrefactoredMatrices(); }
                                                      },
@@ -952,7 +952,7 @@ void Viewer::addSystems(std::vector<std::shared_ptr<Simulation>> systems) {
   simSystems = systems;
 }
 
-void Viewer::addSystem(Simulation *system) {
+void Viewer::addSystem(std::shared_ptr<Simulation> system) {
   simSystems.push_back(system);
 }
 

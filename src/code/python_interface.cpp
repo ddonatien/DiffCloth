@@ -172,7 +172,7 @@ void enableOpenMP(int n_threads = 5) {
   }
 }
 
-void render(Simulation* sim, bool renderPosPairs = false, bool autoExit = true) {
+void render(std::shared_ptr<Simulation> sim, bool renderPosPairs = false, bool autoExit = true) {
   RenderLoop::renderRecordsForSystem(sim, sim->forwardRecords, renderPosPairs, autoExit, "visualization");
 }
 

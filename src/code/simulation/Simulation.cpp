@@ -4171,7 +4171,7 @@ void Simulation::exportConfig(int demoIdx, Simulation::SceneConfiguration &confi
   myfile << "FPS:" << ((int) std::round(1.0f / config.timeStep)) << "\n";
   myfile << "Frame Number:" << config.stepNum + 1 << "\n";
   myfile << "CameraPos:" << vec2str(config.camPos, 5) << "\n";
-  Vec3d lookAtPos = toEigen(getLookAtPos(this, config));
+  Vec3d lookAtPos = toEigen(getLookAtPos(shared_from_this(), config));
   myfile << "CameraLookAtPos:" << vec2str(lookAtPos, 5) << "\n";
   myfile << "Collision:" << boolToString("ON", "OFF", contactEnabled) << "\n";
   myfile << "Self-Collision:" << boolToString("ON", "OFF", selfcollisionEnabled) << "\n";

@@ -26,7 +26,7 @@ static Vec3d posToHashColor(Vec3d in) {
   return Vec3d(out[0] * 1.0 / 6691, out[1] * 1.0 / 6763, out[2] * 1.0 / 7723);
 }
 
-void Renderer::useClothShaderAndSetUniforms(Simulation *msSystem, Shader *clothShader, Viewer &window) {
+void Renderer::useClothShaderAndSetUniforms(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window) {
   clothShader->use();
   clothShader->setVec3("objectColor", 1.0f, 0.3f, 0.31f);
   clothShader->setVec3("colorFabric", msSystem->sceneConfig.fabric.color);
@@ -55,7 +55,7 @@ void Renderer::useClothShaderAndSetUniforms(Simulation *msSystem, Shader *clothS
   clothShader->setBool("visualizeCollision", window.visualizeCollision);
 }
 
-void Renderer::useSimpleShaderAndSetUniforms(Simulation *msSystem, Shader *simpleShader, Viewer &window) {
+void Renderer::useSimpleShaderAndSetUniforms(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window) {
   simpleShader->use();
   simpleShader->setMat4("view", window.camera.getViewMat());
   simpleShader->setMat4("projection", window.getProjectionMat());
@@ -88,7 +88,7 @@ Renderer::fillTriangleToVertexArr(Triangle &m, float *vertexArr, int offset, int
   }
 }
 
-void Renderer::renderMesh(Simulation *msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model,
+void Renderer::renderMesh(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model,
                           Vec3d color,
                           std::vector<Vec3d> center, Vec3d initialDir, Vec3d pointDir, bool shading, bool lighting) {
   useClothShaderAndSetUniforms(msSystem, clothShader, window);
@@ -145,7 +145,7 @@ void Renderer::renderMesh(Simulation *msSystem, Shader *clothShader, Viewer &win
 }
 
 
-void Renderer::renderNormals(Simulation *msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, std::vector<std::pair<Vec3d, Vec3d>> &pointsAndDirs, Vec3d initialDir) {
+void Renderer::renderNormals(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, Simulation::FileMesh &model, std::vector<std::pair<Vec3d, Vec3d>> &pointsAndDirs, Vec3d initialDir) {
   useClothShaderAndSetUniforms(msSystem, clothShader, window);
 
   clothShader->setBool("shading", false);
@@ -210,7 +210,7 @@ void Renderer::renderNormals(Simulation *msSystem, Shader *clothShader, Viewer &
 }
 
 
-void Renderer::renderFixedPoints(Simulation *msSystem, Shader *clothShader, Viewer &window, std::vector<Vec3d> &points,
+void Renderer::renderFixedPoints(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, std::vector<Vec3d> &points,
                                  Vec3d color, bool renderClips, bool useHashColor) {
   if (renderClips) {
     std::vector<Vec3d> pointsWithOffset;
@@ -253,7 +253,7 @@ void Renderer::renderFixedPoints(Simulation *msSystem, Shader *clothShader, View
   }
 }
 
-void Renderer::renderLines(Simulation *msSystem, Shader *simpleShader, Viewer &window,
+void Renderer::renderLines(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window,
                            const std::vector<std::pair<Vec3d, Vec3d>> &lines ) {
   if (lines.empty())
     return;
@@ -321,7 +321,7 @@ void Renderer::renderLines(Simulation *msSystem, Shader *simpleShader, Viewer &w
 }
 
 
-void Renderer::renderLines(Simulation *msSystem, Shader *simpleShader, Viewer &window,
+void Renderer::renderLines(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window,
                            const std::vector<std::pair<Vec3d, Vec3d>> &lines, Vec3d color) {
   if (lines.empty())
     return;
@@ -388,7 +388,7 @@ void Renderer::renderLines(Simulation *msSystem, Shader *simpleShader, Viewer &w
 }
 
 
-void Renderer::renderGrid(Simulation *msSystem, Shader *simpleShader, Viewer &window) {
+void Renderer::renderGrid(std::shared_ptr<Simulation> msSystem, Shader *simpleShader, Viewer &window) {
   useSimpleShaderAndSetUniforms(msSystem, simpleShader, window);
   simpleShader->setInt("renderMode", 0); // ground grid
 
@@ -453,7 +453,7 @@ void Renderer::renderGrid(Simulation *msSystem, Shader *simpleShader, Viewer &wi
 //      glDeleteVertexArrays(1, &gridVAO);
 }
 
-void Renderer::renderSplines(Simulation *msSystem, Shader *clothShader, Viewer &window, std::vector<Spline> &splines,
+void Renderer::renderSplines(std::shared_ptr<Simulation> msSystem, Shader *clothShader, Viewer &window, std::vector<Spline> &splines,
                              Vec3d color) {
   useClothShaderAndSetUniforms(msSystem, clothShader, window);
   glm::vec3 lightColor;

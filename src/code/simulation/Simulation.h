@@ -27,7 +27,9 @@
 #include <memory>
 
 
-class Simulation {
+class Simulation :
+public std::enable_shared_from_this<Simulation>
+{
 
 public:
 
