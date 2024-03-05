@@ -2796,12 +2796,12 @@ void Simulation::updateParticleNormals(const VecXd &x_now) {
   }
 }
 
-Simulation *
+std::shared_ptr<Simulation>
 Simulation::createSystem(SceneConfiguration sceneConfig,
                          Vec3d center, bool runBackward) {
   Logging::logWarning("==========================\nCreating system for demo" + sceneConfig.name);
   checkFolderExistsAndCreate(OUTPUT_PARENT_FOLDER);
-  Simulation *msSystem = new Simulation(center);
+  std::shared_ptr<Simulation> msSystem = std::make_shared<Simulation>(center);
   msSystem->sceneConfig = sceneConfig;
   msSystem->sceneConfig.timeStep = sceneConfig.timeStep;
   msSystem->runBackward = runBackward;

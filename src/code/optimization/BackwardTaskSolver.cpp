@@ -66,12 +66,12 @@ void BackwardTaskSolver::optimizeLBFGS(Simulation *system, OptimizeHelper& helpe
 }
 
 
-OptimizeHelper *BackwardTaskSolver::getOptimizeHelperPointer(Simulation *system, int demoNum) {
+std::shared_ptr<OptimizeHelper> BackwardTaskSolver::getOptimizeHelperPointer(Simulation *system, int demoNum) {
   Logging::logOk("getOptimizeHelperPointer for task" +  DEMOS_STRINGS[demoNum] + "\n");
   OptimizeHelper helper = getOptimizeHelper(system, demoNum);
 
-  return new OptimizeHelper(static_cast<Demos>(demoNum), helper.system, helper.lossInfo, helper.taskInfo, helper.lossType,
-                            helper.system->sceneConfig.stepNum, helper.param_actual);
+  return std::make_shared<OptimizeHelper>(static_cast<Demos>(demoNum), helper.system, helper.lossInfo, helper.taskInfo, helper.lossType,
+                                          helper.system->sceneConfig.stepNum, helper.param_actual);
 }
 
 OptimizeHelper BackwardTaskSolver::getOptimizeHelper(Simulation *system, int demoNum) {
