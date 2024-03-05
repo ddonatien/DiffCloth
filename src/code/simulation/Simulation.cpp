@@ -2817,6 +2817,9 @@ Simulation::createSystem(SceneConfiguration sceneConfig,
 
   msSystem->myConfig = {.x0 = msSystem->forwardRecords[0].x, .v0 = msSystem->forwardRecords[0].v, .k_stiff = Triangle::k_stiff};
 
+  std::cout<<"createSystem"<<std::endl;
+  std::cout<<msSystem->sysMat.size()<<std::endl;
+  std::cout<<msSystem->sysMat[0].constraints.size()<<std::endl;
 
   return msSystem;
 

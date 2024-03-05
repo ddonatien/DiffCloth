@@ -94,17 +94,9 @@ std::shared_ptr<Simulation> makeSim(std::string exampleName, bool runBackward = 
 
 std::shared_ptr<Simulation> makeSimFromConf(Simulation::SceneConfiguration sceneConfiguration, bool runBackward = true) {
   Simulation::forwardConvergenceThreshold = 1e-5;
-  std::shared_ptr<Simulation> sim = nullptr;
+  std::shared_ptr<Simulation> sim = Simulation::createSystem(sceneConfiguration,
+                                                             Vec3d(0, 0, 0), runBackward);
 
-  // create simulation instance
-  sim = Simulation::createSystem(sceneConfiguration,
-                                 Vec3d(0, 0, 0), runBackward);
-  // // define loss
-  // Vec3d bustCenter =
-  //         sim->sphere_head.center + Vec3d(0, sim->sphere_head.radius * 0.6, 0);
-  // Vec3d hatCenter = (sim->restShapeMinDim + sim->restShapeMaxDim) * 0.5;
-  // Vec3d translation = bustCenter - hatCenter;
-  // sim->taskLossInfo.targetTranslation = translation;
   return sim;
 }
 
