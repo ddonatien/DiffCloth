@@ -27,9 +27,7 @@
 #include <memory>
 
 
-class Simulation :
-public std::enable_shared_from_this<Simulation>
-{
+class Simulation{
 
 public:
 
@@ -542,7 +540,7 @@ public:
       Simulation::enableConstantForcefield = enableConstantForcefield;
     }
 
-    static glm::vec3 getLookAtPos(std::shared_ptr<Simulation> system, Simulation::SceneConfiguration &profile) {
+    static glm::vec3 getLookAtPos(Simulation *system, Simulation::SceneConfiguration &profile) {
       Vec3d p(0, 0, 0);
       switch (profile.camFocusPointType) {
         case CameraFocusPointType::ORIGIN: {

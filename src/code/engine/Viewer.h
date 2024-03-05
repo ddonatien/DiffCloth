@@ -239,7 +239,7 @@ public:
 
       std::printf("finished reinit; reset camera\n");
 
-      camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
+      camera.setLookAt(Simulation::getLookAtPos(simSystems[0].get(), simSystems[0]->sceneConfig));
       camera.setCamPos(glm::vec3(simSystems[0]->sceneConfig.camPos[0], simSystems[0]->sceneConfig.camPos[1],
                                  simSystems[0]->sceneConfig.camPos[2]));
 
@@ -251,7 +251,7 @@ public:
       for (std::shared_ptr<Simulation> s : simSystems) {
         s->initScene();
       }
-      camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
+      camera.setLookAt(Simulation::getLookAtPos(simSystems[0].get(), simSystems[0]->sceneConfig));
 
     }
 
@@ -274,7 +274,7 @@ public:
 
       dimControl->setValue(config.clothDimX);
       meshDim = config.clothDimX;
-      camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
+      camera.setLookAt(Simulation::getLookAtPos(simSystems[0].get(), simSystems[0]->sceneConfig));
 
     }
 

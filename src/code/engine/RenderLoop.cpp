@@ -21,7 +21,7 @@ void RenderLoop::renderRecordsForSystem(std::shared_ptr<Simulation> system, std:
     Simulation::SceneConfiguration &sceneConfig = system->sceneConfig;
     viewer.camera.setCamPos(glm::vec3(sceneConfig.camPos[0], sceneConfig.camPos[1], sceneConfig.camPos[2]));
 
-    viewer.camera.setLookAt(system->getLookAtPos(system, sceneConfig));
+    viewer.camera.setLookAt(system->getLookAtPos(system.get(), sceneConfig));
     viewer.addSystems({system});
     glfwWindow = viewer.init();
 
