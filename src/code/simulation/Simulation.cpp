@@ -3526,6 +3526,9 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   std::cout<<taskConfiguration.forwardAccuracyLevel<<std::endl;
   std::cout<<taskConfiguration.backwardAccuracyLevel<<std::endl;
 
+  int coutctr = 0;
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
   bool PmatrixChanged = false;
   bool constraintChanged = false;
   for (int i = 0; i < Constraint::CONSTRAINT_NUM; i++) {
@@ -3536,6 +3539,8 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
 
   }
 
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
   if (constraintChanged) {
     for (SystemMatrix &sys : sysMat) {
       for (Constraint *c: sys.constraints) {
@@ -3544,11 +3549,15 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
     }
 
   }
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
   if (taskConfiguration.dL_dfext) {
     Simulation::wind = param.f_ext.normalized();
     Simulation::windNorm = param.f_ext.norm();
   }
 
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
   if (taskConfiguration.dL_dfwind) {
     Vec3d windForce = param.f_extwind.segment(0, 3);
     Simulation::wind = windForce.normalized();
@@ -3565,6 +3574,8 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
     perstepWindFactor = param.f_ext_timestep;
   }
 
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
 
   // std::cout<<"dL_dcontrolPoints"<<std::endl;
   // std::cout<<"sysMat: "<<sysMat.size()<<std::endl;
@@ -3601,9 +3612,13 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
     initializePrefactoredMatrices();
   }
 
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
 //  std::printf("final resetting...\n");
   resetSystem();
 
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
 
 
   if (taskConfiguration.dL_dx0) { // for rest shape param, set it after all resets have been finished
@@ -3618,6 +3633,8 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   }
 
 
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
   // reset record
   restoreToSingleRecordFromCurrentState();
   // reset states
@@ -3625,6 +3642,8 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   perStepGradient.clear();
   perstepTrajectory.clear();
 
+  std::cout<<coutctr<<std::endl;
+  coutctr++;
   explosionEncountered = false;
 
 }
