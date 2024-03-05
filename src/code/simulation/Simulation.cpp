@@ -2802,26 +2802,22 @@ void Simulation::updateParticleNormals(const VecXd &x_now) {
   }
 }
 
-std::shared_ptr<Simulation>
-Simulation::createSystem(SceneConfiguration sceneConfig,
+Simulation Simulation::createSystem(SceneConfiguration sceneConfig,
                          Vec3d center, bool runBackward) {
   Logging::logWarning("==========================\nCreating system for demo" + sceneConfig.name);
   checkFolderExistsAndCreate(OUTPUT_PARENT_FOLDER);
-  std::shared_ptr<Simulation> msSystem = std::make_shared<Simulation>(center);
-  msSystem->sceneConfig = sceneConfig;
-  msSystem->sceneConfig.timeStep = sceneConfig.timeStep;
-  msSystem->runBackward = runBackward;
-  msSystem->uniqueID = time(NULL);
+  Simulation msSystem = Simulation(center);
+  msSystem.sceneConfig = sceneConfig;
+  msSystem.sceneConfig.timeStep = sceneConfig.timeStep;
+  msSystem.runBackward = runBackward;
+  msSystem.uniqueID = time(NULL);
 
-
-
-
-  msSystem->createClothMesh();
-  msSystem->initScene();
-  msSystem->restoreToSingleRecordFromCurrentState();
-
-
-  msSystem->myConfig = {.x0 = msSystem->forwardRecords[0].x, .v0 = msSystem->forwardRecords[0].v, .k_stiff = Triangle::k_stiff};
+  msSystem.createClothMesh();
+  msSystem.initScene();
+  msSystem.restoreToSingleRecordFromCurrentState();
+          .
+          .
+  msSystem.myConfig = {.x0 = msSystem.forwardRecords[0].x, .v0 = msSystem.forwardRecords[0].v, .k_stiff = Triangle::k_stiff};
 
   std::cout<<"createSystem"<<std::endl;
   std::cout<<msSystem->sysMat.size()<<std::endl;
