@@ -943,7 +943,7 @@ void Viewer::addCameraControlWidgets() {
 
   SettingsControl->addButton("Set to SceneConfig", [&]() {
       camera.setCamPos(toGlm(simSystems[0]->sceneConfig.camPos));
-      camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
+      camera.setLookAt(Simulation::getLookAtPos(simSystems[0].get(), simSystems[0]->sceneConfig));
   });
 
 }
@@ -2331,7 +2331,7 @@ void Viewer::addReinitWidgets() {
       simSystems[0]->loadWindSim2RealAnimationSequence(selectedFolder, frameFileNames,
                                                        selectedFolder == "flag-ryanwhite");
       camera.setCamPos(toGlm(simSystems[0]->sceneConfig.camPos));
-      camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
+      camera.setLookAt(Simulation::getLookAtPos(simSystems[0].get(), simSystems[0]->sceneConfig));
       isSimulationOn = false;
       isforward = true;
       isplaybackSimulationOn = false;
@@ -2344,6 +2344,6 @@ void Viewer::addReinitWidgets() {
       reinitWithSceneFabric();
       resetAllSimulation();
       camera.setCamPos(toGlm(simSystems[0]->sceneConfig.camPos));
-      camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
+      camera.setLookAt(Simulation::getLookAtPos(simSystems[0].get(), simSystems[0]->sceneConfig));
   });
 }
