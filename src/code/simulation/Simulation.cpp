@@ -2853,6 +2853,8 @@ void Simulation::resetParticlesAndPrimitivesToRestPose() {
 }
 
 void Simulation::resetSystem() {
+  std::cout<<"ResetSystem()"<<std::endl;
+  std::cout<<sysMat.size()<<std::endl;
   // reset particle state and mass matrix
   resetParticlesAndPrimitivesToRestPose();
 
@@ -2863,6 +2865,8 @@ void Simulation::resetSystem() {
   perStepGradient.clear();
   perstepTrajectory.clear();
   explosionEncountered = false;
+  std::cout<<"ResetSystem() end"<<std::endl;
+  std::cout<<sysMat.size()<<std::endl;
 };
 
 void Simulation::appendPerStepGradient(VecXd& x) {
