@@ -3529,6 +3529,8 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   std::cout<<taskConfiguration.forwardAccuracyLevel<<std::endl;
   std::cout<<taskConfiguration.backwardAccuracyLevel<<std::endl;
 
+  std::cout<<sysMat.size()<<std::endl;
+
   int coutctr = 0;
   std::cout<<coutctr<<std::endl;
   coutctr++;
