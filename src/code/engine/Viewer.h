@@ -60,7 +60,7 @@ public:
     nanogui::Screen *screen = nullptr;
     std::vector<nanogui::detail::FormWidget<float> *> cameraWidgets;
     nanogui::detail::FormWidget<int> *stepLimit;
-    std::vector<Simulation *> simSystems;
+    std::vector<std::shared_ptr<Simulation>> simSystems;
     std::vector<nanogui::TextBox *> simSystemNameBoard;
     std::vector<Vec3d> symPosCenters;
     bool useFiniteDiff = false, useLBFGS = false, randomInit = true, perfTest = false, directBackward = false;
@@ -219,7 +219,7 @@ public:
 
       stepLimit->callback()(std::to_string(config.stepNum));
 
-      for (Simulation* system : simSystems) {
+      for (std::shared_ptr<Simulation> system : simSystems) {
         system->sceneConfig = config;
 
       }
@@ -232,7 +232,7 @@ public:
       bendingStiffness = config.fabric.k_stiff_bending;
       densityControl->setValue(config.fabric.density);
       dimControl->setValue(config.fabric.clothDimX);
-      for (Simulation *s : simSystems) {
+      for (std::shared_ptr<Simulation> s : simSystems) {
         s->createClothMesh();
         s->initScene();
       }
@@ -248,7 +248,7 @@ public:
 
     void reinitScene() {
       std::printf("Reinit Scene called\n");
-      for (Simulation *s : simSystems) {
+      for (std::sahred_ptr<Simulation> s : simSystems) {
         s->initScene();
       }
       camera.setLookAt(Simulation::getLookAtPos(simSystems[0], simSystems[0]->sceneConfig));
@@ -256,7 +256,7 @@ public:
     }
 
     void reinitFabric(Simulation::FabricConfiguration config) {
-      for (Simulation *s : simSystems) {
+      for (std::shared_ptr<Simulation> s : simSystems) {
         s->sceneConfig.fabric = config;
         s->createClothMesh();
         s->initScene();

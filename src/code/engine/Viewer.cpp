@@ -774,7 +774,7 @@ void Viewer::addSceneControlWidgets() {
 
   stepLimit = SettingsControl->addVariable<int>("stepNum",
                                                 [&](const int &v) {
-                                                    for (Simulation* s : simSystems) {
+                                                    for (std::shared_ptr<Simulation> s : simSystems) {
                                                       s->sceneConfig.stepNum = v;
                                                     }
 
