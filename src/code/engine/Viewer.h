@@ -318,8 +318,8 @@ public:
     int height;
     float dof;
 
-    void addSystems(std::vector<Simulation *> systems);
-    void addSystem(Simulation * system);
+    void addSystems(std::vector<std::shared_ptr<Simulation>> systems);
+    void addSystem(std::shared_ptr<Simulation> system);
 private:
     volatile float lastTime = 0.0f;
     volatile int frameNum = 0;
