@@ -3513,18 +3513,18 @@ void
 Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfiguration,
                                   Simulation::ParamInfo &param) {
 
-  std::cout<<dL_density<<std::endl;
-  std::cout<<dL_dfext<<std::endl;
-  std::cout<<dL_dconstantForceField<<std::endl;
-  std::cout<<dL_dfwind<<std::endl;
-  std::cout<<adddr_dd<<std::endl;
-  std::cout<<dL_dcontrolPoints<<std::endl;
-  std::cout<<dL_dxfixed<<std::endl;
-  std::cout<<dL_dmu<<std::endl;
-  std::cout<<dL_dx0<<std::endl;
-  std::cout<<dL_dwindFactor<<std::endl;
-  std::cout<<forwardAccuracyLevel<<std::endl;
-  std::cout<<backwardAccuracyLevel<<std::endl;
+  std::cout<<taskConfiguration.dL_density<<std::endl;
+  std::cout<<taskConfiguration.dL_dfext<<std::endl;
+  std::cout<<taskConfiguration.dL_dconstantForceField<<std::endl;
+  std::cout<<taskConfiguration.dL_dfwind<<std::endl;
+  std::cout<<taskConfiguration.adddr_dd<<std::endl;
+  std::cout<<taskConfiguration.dL_dcontrolPoints<<std::endl;
+  std::cout<<taskConfiguration.dL_dxfixed<<std::endl;
+  std::cout<<taskConfiguration.dL_dmu<<std::endl;
+  std::cout<<taskConfiguration.dL_dx0<<std::endl;
+  std::cout<<taskConfiguration.dL_dwindFactor<<std::endl;
+  std::cout<<taskConfiguration.forwardAccuracyLevel<<std::endl;
+  std::cout<<taskConfiguration.backwardAccuracyLevel<<std::endl;
 
   bool PmatrixChanged = false;
   bool constraintChanged = false;
