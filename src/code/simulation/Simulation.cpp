@@ -2472,17 +2472,14 @@ void Simulation::updateCollisionRadii() {
 }
 
 void Simulation::restoreToSingleRecordFromCurrentState() {
-  std::cout<<"restore A"<<std::endl;
   std::pair<VecXd, VecXd> posVelVec = getCurrentPosVelocityVec();
 
   x_n = posVelVec.first;
   v_n = posVelVec.second;
 
 
-  std::cout<<particles.size()<<std::endl;
   VecXd empty(3 * particles.size());
   empty.setZero();
-  std::cout<<sysMat[0].fixedPoints.size()<<std::endl;
   VecXd x_fixedpoints(3 * sysMat[0].fixedPoints.size());
   for (int i = 0; i < sysMat[0].fixedPoints.size(); i++)
     x_fixedpoints.segment(i * 3, 3) = sysMat[0].fixedPoints[i].pos;
@@ -2493,7 +2490,6 @@ void Simulation::restoreToSingleRecordFromCurrentState() {
     x_primitives.segment(i * 3, 3) = primitives[i]->center;
 
 
-  std::cout<<"restore B"<<std::endl;
   ForwardInformation singleRecord = {};
   singleRecord.t = 0;
   singleRecord.sysMatId = 0;
@@ -2513,11 +2509,9 @@ void Simulation::restoreToSingleRecordFromCurrentState() {
   singleRecord.x_prim = x_primitives;
   singleRecord.avgDeformation = calculateTriangleDeformation(x_n);
 
-  std::cout<<"restore C"<<std::endl;
   if (!sysMat[0].controlPointSplines.empty())
     singleRecord.splines = sysMat[0].controlPointSplines;
 
-  std::cout<<"restore D"<<std::endl;
   forwardRecords = {singleRecord};
 
 }
@@ -2819,17 +2813,12 @@ std::shared_ptr<Simulation> Simulation::createSystem(SceneConfiguration sceneCon
 
   msSystem->myConfig = {.x0 = msSystem->forwardRecords[0].x, .v0 = msSystem->forwardRecords[0].v, .k_stiff = Triangle::k_stiff};
 
-  std::cout<<"createSystem"<<std::endl;
-  std::cout<<msSystem->sysMat.size()<<std::endl;
-  std::cout<<msSystem->sysMat[0].constraints.size()<<std::endl;
-
   return msSystem;
 
 }
 
 void Simulation::resetParticlesAndPrimitivesToRestPose() {
   // reset particles
-  std::cout<<"A"<<std::endl;
   for (Particle &p : particles) {
     p.pos = p.pos_init;
     p.velocity = p.velocity_init;
@@ -2840,7 +2829,6 @@ void Simulation::resetParticlesAndPrimitivesToRestPose() {
     }
   }
 
-  std::cout<<"B"<<std::endl;
   for (FixedPoint &p: sysMat[0].fixedPoints) {
     p.pos = p.pos_rest;
     if (std::isnan(p.pos.norm())) {
@@ -2851,29 +2839,22 @@ void Simulation::resetParticlesAndPrimitivesToRestPose() {
   }
 
   //reset primitives
-  std::cout<<"C"<<std::endl;
   for (Primitive *p : primitives) {
     p->reset();
   }
 }
 
 void Simulation::resetSystem() {
-  std::cout<<"ResetSystem()"<<std::endl;
-  std::cout<<sysMat.size()<<std::endl;
   // reset particle state and mass matrix
-  std::cout<<"resetParticles...()"<<std::endl;
   resetParticlesAndPrimitivesToRestPose();
 
   // reset record
-  std::cout<<"restoreTo...()"<<std::endl;
   restoreToSingleRecordFromCurrentState();
   // reset states
   currentSysmatId = 0;
   perStepGradient.clear();
   perstepTrajectory.clear();
   explosionEncountered = false;
-  std::cout<<"ResetSystem() end"<<std::endl;
-  std::cout<<sysMat.size()<<std::endl;
 };
 
 void Simulation::appendPerStepGradient(VecXd& x) {
@@ -3604,36 +3585,25 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
 //  std::printf("final resetting...\n");
   resetSystem();
 
-  std::cout<<"Here 1"<<std::endl;
-  std::cout<<taskConfiguration.dL_dx0<<std::endl;
   if (taskConfiguration.dL_dx0) { // for rest shape param, set it after all resets have been finished
-    std::cout<<forwardRecords[0].x.size()<<std::endl;
-    std::cout<<param.x0.size()<<std::endl;
     forwardRecords[0].x = param.x0;
-    std::cout<<particles.size()<<std::endl;
     for (Particle &p : particles) {
       p.pos = param.x0.segment(p.idx * 3, 3);
     }
   }
-  std::cout<<"Here 2"<<std::endl;
   if (std::isnan(forwardRecords[0].x.norm()) || std::isnan(forwardRecords[0].v.norm())) {
     std::printf("WARNING: NAN encountered after reset: x: %.4f v: %.4f\n", forwardRecords[0].x.norm(),
                 forwardRecords[0].v.norm());
   }
 
-  std::cout<<"Here 1"<<std::endl;
   // reset record
   restoreToSingleRecordFromCurrentState();
   // reset states
   currentSysmatId = 0;
-  std::cout<<"PreStepGradient"<<std::endl;
   perStepGradient.clear();
-  std::cout<<"PreStepTrajectory"<<std::endl;
   perstepTrajectory.clear();
 
   explosionEncountered = false;
-  std::cout<<"Reset system with params finished"<<std::endl;
-
 }
 
 void
