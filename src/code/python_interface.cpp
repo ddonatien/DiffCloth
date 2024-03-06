@@ -88,7 +88,7 @@ std::shared_ptr<Simulation> makeSim(std::string exampleName, bool runBackward = 
   else {
     throwError("Undefined example name (" + exampleName + ").");
   }
-  return std::shared_ptr<Simulatiom>(sim);
+  return std::shared_ptr<Simulation>(sim);
 }
 
 

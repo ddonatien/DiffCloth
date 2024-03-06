@@ -116,9 +116,8 @@ public:
     static void runExample2() {
 //      Simulation::forwardConvergenceThreshold = 1e-5;
       Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
-      Simulation sim = Simulation::createSystem(initSceneProfile,
-                                                Vec3d(0, 0, 0), true);
-      auto clothSystem = std::shared_ptr<Simulation>(sim);
+      std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
+                                                  Vec3d(0, 0, 0), true);
 
       OptimizeHelper helper = BackwardTaskSolver::getOptimizeHelper(clothSystem, Demos::DEMO_WEAR_SOCK);
 //      OptimizeHelper helper = BackwardTaskSolver::getOptimizeHelper(clothSystem, Demos::DEMO_WEAR_HAT);
@@ -146,9 +145,8 @@ public:
 
     static void runSec6_1_SydId_Wind_Tshirt() {
       Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::tshirtScene;
-      Simulation sim = Simulation::createSystem(initSceneProfile,
-                                                Vec3d(0, 0, 0), true);
-      auto clothSystem = std::shared_ptr<Simulation>(sim);
+      std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
+                                                  Vec3d(0, 0, 0), true);
 
       Simulation::forwardConvergenceThreshold = 1e-5;
       OptimizeHelper helper = BackwardTaskSolver::getOptimizeHelper(clothSystem, Demos::DEMO_WIND_TSHIRT);
@@ -178,9 +176,8 @@ public:
 
     static void  runSec6_3_inverseDesign() {
       Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::tshirtScene;
-      Simulation sim = Simulation::createSystem(initSceneProfile,
-                                                Vec3d(0, 0, 0), true);
-      auto clothSystem = std::shared_ptr<Simulation>(sim);
+      std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
+                                                  Vec3d(0, 0, 0), true);
 
       Simulation::forwardConvergenceThreshold = 1e-9;
       OptimizeHelper helper = BackwardTaskSolver::getOptimizeHelper(clothSystem, Demos::DEMO_DRESS_TWIRL);
@@ -211,9 +208,8 @@ public:
 
     static void runSec6_4_sim2real() {
         Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::tshirtScene;
-        Simulation sim = Simulation::createSystem(initSceneProfile,
+        std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
                                                   Vec3d(0, 0, 0), true);
-        auto clothSystem = std::shared_ptr<Simulation>(sim);
 
         Simulation::forwardConvergenceThreshold = 1e-9;
         OptimizeHelper helper = BackwardTaskSolver::getOptimizeHelper(clothSystem, Demos::DEMO_WIND_SIM2REAL);
@@ -247,9 +243,8 @@ public:
       static void runSec6_1_sphere() {
 
         Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::tshirtScene;
-        Simulation sim = Simulation::createSystem(initSceneProfile,
+        std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
                                                   Vec3d(0, 0, 0), true);
-        auto clothSystem = std::shared_ptr<Simulation>(sim);
 
         Simulation::forwardConvergenceThreshold = 1e-9;
         OptimizeHelper helper = BackwardTaskSolver::getOptimizeHelper(clothSystem, Demos::DEMO_SPHERE_ROTATE);
