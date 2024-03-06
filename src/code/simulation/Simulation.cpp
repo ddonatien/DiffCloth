@@ -2806,7 +2806,7 @@ std::shared_ptr<Simulation> Simulation::createSystem(SceneConfiguration sceneCon
                          Vec3d center, bool runBackward) {
   Logging::logWarning("==========================\nCreating system for demo" + sceneConfig.name);
   checkFolderExistsAndCreate(OUTPUT_PARENT_FOLDER);
-  std::shared_ptr<Simulation> msSystem = std:make_shared<Simulation>(center);
+  std::shared_ptr<Simulation> msSystem = std::make_shared<Simulation>(center);
   msSystem->sceneConfig = sceneConfig;
   msSystem->sceneConfig.timeStep = sceneConfig.timeStep;
   msSystem->runBackward = runBackward;
