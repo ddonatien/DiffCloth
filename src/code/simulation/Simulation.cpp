@@ -3604,17 +3604,20 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
 //  std::printf("final resetting...\n");
   resetSystem();
 
+  std::cout<<"Here 1"<<std::endl;
   if (taskConfiguration.dL_dx0) { // for rest shape param, set it after all resets have been finished
     forwardRecords[0].x = param.x0;
     for (Particle &p : particles) {
       p.pos = param.x0.segment(p.idx * 3, 3);
     }
   }
+  std::cout<<"Here 2"<<std::endl;
   if (std::isnan(forwardRecords[0].x.norm()) || std::isnan(forwardRecords[0].v.norm())) {
     std::printf("WARNING: NAN encountered after reset: x: %.4f v: %.4f\n", forwardRecords[0].x.norm(),
                 forwardRecords[0].v.norm());
   }
 
+  std::cout<<"Here 3"<<std::endl;
   // reset record
   restoreToSingleRecordFromCurrentState();
   // reset states
