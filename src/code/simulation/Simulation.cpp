@@ -3610,6 +3610,7 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
     std::cout<<forwardRecords[0].x.size()<<std::endl;
     std::cout<<param.x0.size()<<std::endl;
     forwardRecords[0].x = param.x0;
+    std::cout<<particles.size()<<std::endl;
     for (Particle &p : particles) {
       p.pos = param.x0.segment(p.idx * 3, 3);
     }
