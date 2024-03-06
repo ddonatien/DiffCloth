@@ -321,6 +321,7 @@ PYBIND11_MODULE(diffcloth_py, m) {
 
   // Simulation::BackwardTaskInformation
   py::class_<Simulation::BackwardTaskInformation>(m, "BackwardTaskInformation")
+          .def(py::init<>())
           .def_readonly("dL_dk_pertype", &Simulation::BackwardTaskInformation::dL_dk_pertype)
           .def_readwrite("dL_density", &Simulation::BackwardTaskInformation::dL_density)
           .def_readwrite("dL_dfext", &Simulation::BackwardTaskInformation::dL_dfext)
