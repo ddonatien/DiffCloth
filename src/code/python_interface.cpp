@@ -391,7 +391,7 @@ PYBIND11_MODULE(diffcloth_py, m) {
 
 
   // Simulation
-  py::class_<Simulation>(m, "Simulation")
+  py::class_<Simulation, std::shared_ptr<Simulation>>(m, "Simulation")
           .def_readonly("taskLossInfo", &Simulation::taskLossInfo)
           .def_readonly("primitives", &Simulation::primitives)
           .def_readonly("sceneConfig", &Simulation::sceneConfig)
@@ -435,7 +435,7 @@ PYBIND11_MODULE(diffcloth_py, m) {
           ;
 
   // Optimization helper
-  py::class_<OptimizeHelper>(m, "OptimizeHelper")
+  py::class_<OptimizeHelper, std::shared_ptr<OptimizeHelper>>(m, "OptimizeHelper")
           .def_readonly("paramLowerBound", &OptimizeHelper::paramLowerBound)
           .def_readonly("paramUpperBound", &OptimizeHelper::paramUpperBound)
           .def_readonly("forward_steps", &OptimizeHelper::FORWARD_STEPS)
