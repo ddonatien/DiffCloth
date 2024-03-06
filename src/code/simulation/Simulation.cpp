@@ -3607,7 +3607,8 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   std::cout<<"Here 1"<<std::endl;
   std::cout<<taskConfiguration.dL_dx0<<std::endl;
   if (taskConfiguration.dL_dx0) { // for rest shape param, set it after all resets have been finished
-    std::cout<<forwardRecords[0].x<<std::endl;
+    std::cout<<forwardRecords[0].x.size()<<std::endl;
+    std::cout<<param.x0.size()<<std::endl;
     forwardRecords[0].x = param.x0;
     for (Particle &p : particles) {
       p.pos = param.x0.segment(p.idx * 3, 3);
