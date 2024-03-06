@@ -14,7 +14,7 @@ namespace py = pybind11;
 
 std::shared_ptr<Simulation> makeSim(std::string exampleName, bool runBackward = true) {
   Simulation::forwardConvergenceThreshold = 1e-5;
-  Simulation sim;
+  std::shared_ptr<Simulation> sim = nullptr;
   if (exampleName == "wear_hat") {
     // create simulation instance
     Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
@@ -94,10 +94,10 @@ std::shared_ptr<Simulation> makeSim(std::string exampleName, bool runBackward = 
 
 std::shared_ptr<Simulation> makeSimFromConf(Simulation::SceneConfiguration sceneConfiguration, bool runBackward = true) {
   Simulation::forwardConvergenceThreshold = 1e-5;
-  Simulation sim = Simulation::createSystem(sceneConfiguration,
+  std::shared_ptr<Simulation> sim = Simulation::createSystem(sceneConfiguration,
                                             Vec3d(0, 0, 0), runBackward);
 
-  return std::shared_pts<Simulation>(sim);
+  return sim;
 }
 
 std::shared_ptr<OptimizeHelper> makeOptimizeHelperWithSim(std::string exampleName, std::shared_ptr<Simulation> sim) {
@@ -145,8 +145,7 @@ std::shared_ptr<OptimizeHelper> makeOptimizeHelperWithSim(std::string exampleNam
 
 std::shared_ptr<OptimizeHelper> makeOptimizeHelper(std::string exampleName) {
   Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
-  Simulation sim  = Simulation::createSystem(initSceneProfile,
-                                                              Vec3d(0, 0, 0), false);
+  std::shared_ptr<Simulation> sim  = Simulation::createSystem(initSceneProfile, Vec3d(0, 0, 0), false);
   return makeOptimizeHelperWithSim(exampleName, std::shared_ptr<Simulation>(sim));
 }
 

@@ -19,10 +19,10 @@ Viewer window;
 
 void runBackwardTask(int demoIdx, bool isRandom, int srandSeed) {
   Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
-  Simulation clothSystem = Simulation::createSystem(initSceneProfile,
+  std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
                                                                      Vec3d(0, 0, 0), true);
 
-  BackwardTaskSolver::solveDemo(std::shared_ptr<Simulation>(clothSystem), [&](const std::string &v) {}, demoIdx, isRandom,
+  BackwardTaskSolver::solveDemo(clothSystem, [&](const std::string &v) {}, demoIdx, isRandom,
                                 srandSeed);
 
 
@@ -31,11 +31,11 @@ void runBackwardTask(int demoIdx, bool isRandom, int srandSeed) {
 
 void renderFromFolder(int demoIdx,  std::string subFolder) {
   Simulation::TaskConfiguration taskConfig = OptimizationTaskConfigurations::demoNumToConfigMap[demoIdx];
-  Simulation clothSystem = Simulation::createSystem(taskConfig.scene,
+  std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(taskConfig.scene,
                                                                      Vec3d(0, 0, 0), true);
   clothSystem->resetForwardRecordsFromFolder(subFolder);
 
-  RenderLoop::renderRecordsForSystem(std::shared_ptr<Simulation>(clothSystem), clothSystem->forwardRecords, false, true,
+  RenderLoop::renderRecordsForSystem(clothSystem, clothSystem->forwardRecords, false, true,
                                      "Set text here for whatever you need (only single line is supported): Visualization for pySimulations::runExample");
 
   // delete clothSystem;

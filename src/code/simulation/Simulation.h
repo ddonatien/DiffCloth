@@ -500,7 +500,7 @@ public:
     }
 
 
-    static Simulation createSystem(Simulation::SceneConfiguration sceneConfig,
+    static std::shared_ptr<Simulation> createSystem(Simulation::SceneConfiguration sceneConfig,
                                    Vec3d center, bool runBackward = true);
 
     ~Simulation() {}
