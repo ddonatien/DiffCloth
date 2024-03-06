@@ -3527,24 +3527,7 @@ void
 Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfiguration,
                                   Simulation::ParamInfo &param) {
 
-  std::cout<<taskConfiguration.dL_density<<std::endl;
-  std::cout<<taskConfiguration.dL_dfext<<std::endl;
-  std::cout<<taskConfiguration.dL_dconstantForceField<<std::endl;
-  std::cout<<taskConfiguration.dL_dfwind<<std::endl;
-  std::cout<<taskConfiguration.adddr_dd<<std::endl;
-  std::cout<<taskConfiguration.dL_dcontrolPoints<<std::endl;
-  std::cout<<taskConfiguration.dL_dxfixed<<std::endl;
-  std::cout<<taskConfiguration.dL_dmu<<std::endl;
-  std::cout<<taskConfiguration.dL_dx0<<std::endl;
-  std::cout<<taskConfiguration.dL_dwindFactor<<std::endl;
-  std::cout<<taskConfiguration.forwardAccuracyLevel<<std::endl;
-  std::cout<<taskConfiguration.backwardAccuracyLevel<<std::endl;
-
-  std::cout<<sysMat.size()<<std::endl;
-
   int coutctr = 0;
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
   bool PmatrixChanged = false;
   bool constraintChanged = false;
   for (int i = 0; i < Constraint::CONSTRAINT_NUM; i++) {
@@ -3554,31 +3537,19 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
     }
 
   }
-
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
   if (constraintChanged) {
-    std::cout<<sysMat.size()<<std::endl;
     for (SystemMatrix &sys : sysMat) {
-      std::cout<<"Here"<<std::endl;
-      std::cout<<sys.constraints.size()<<std::endl;
       for (Constraint *c: sys.constraints) {
-        std::cout<<"There"<<std::endl;
-        std::cout<<c->constraintNum<<std::endl;
         c->setConstraintWeight();
       }
     }
 
   }
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
   if (taskConfiguration.dL_dfext) {
     Simulation::wind = param.f_ext.normalized();
     Simulation::windNorm = param.f_ext.norm();
   }
 
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
   if (taskConfiguration.dL_dfwind) {
     Vec3d windForce = param.f_extwind.segment(0, 3);
     Simulation::wind = windForce.normalized();
@@ -3594,9 +3565,6 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   if (taskConfiguration.dL_dwindFactor) {
     perstepWindFactor = param.f_ext_timestep;
   }
-
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
 
   // std::cout<<"dL_dcontrolPoints"<<std::endl;
   // std::cout<<"sysMat: "<<sysMat.size()<<std::endl;
@@ -3633,14 +3601,8 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
     initializePrefactoredMatrices();
   }
 
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
 //  std::printf("final resetting...\n");
   resetSystem();
-
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
-
 
   if (taskConfiguration.dL_dx0) { // for rest shape param, set it after all resets have been finished
     forwardRecords[0].x = param.x0;
@@ -3653,9 +3615,6 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
                 forwardRecords[0].v.norm());
   }
 
-
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
   // reset record
   restoreToSingleRecordFromCurrentState();
   // reset states
@@ -3663,8 +3622,6 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   perStepGradient.clear();
   perstepTrajectory.clear();
 
-  std::cout<<coutctr<<std::endl;
-  coutctr++;
   explosionEncountered = false;
 
 }
