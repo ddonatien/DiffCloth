@@ -32,9 +32,8 @@ public:
          * @param runBackward needs be set to true if you intend to run the backward pass.
          */
         Simulation::SceneConfiguration initSceneProfile = OptimizationTaskConfigurations::hatScene;
-        Simulation sim = Simulation::createSystem(initSceneProfile,
+        std::shared_ptr<Simulation> clothSystem = Simulation::createSystem(initSceneProfile,
                                                  Vec3d(0, 0, 0), true);
-        auto clothSystem = std::shared_ptr<Simulation>(sim);
 
         clothSystem->sceneConfig.trajectory = TrajectoryConfigs::PER_STEP_TRAJECTORY;
 
