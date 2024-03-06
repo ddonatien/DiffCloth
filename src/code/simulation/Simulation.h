@@ -496,6 +496,7 @@ public:
       sceneConfig.timeStep = 1.0 / 60;
       sceneConfig.stepNum = 100;
 
+      std::cout<<"Creating Simulation -> "<<this<<std::endl;
 
     }
 
@@ -503,7 +504,9 @@ public:
     static std::shared_ptr<Simulation> createSystem(Simulation::SceneConfiguration sceneConfig,
                                    Vec3d center, bool runBackward = true);
 
-    ~Simulation() {}
+    ~Simulation() {
+      std::cout<<"Destructing Simulation -> "<<this<<std::endl;
+    }
 
     void enableStaticPoint(bool v) {
       staticEnabled = v;
