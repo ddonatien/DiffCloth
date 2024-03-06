@@ -3619,10 +3619,13 @@ Simulation::resetSystemWithParams(Simulation::BackwardTaskInformation &taskConfi
   restoreToSingleRecordFromCurrentState();
   // reset states
   currentSysmatId = 0;
+  std::cout<<"PreStepGradient"<<std::endl;
   perStepGradient.clear();
+  std::cout<<"PreStepTrajectory"<<std::endl;
   perstepTrajectory.clear();
 
   explosionEncountered = false;
+  std::cout<<"Reset system with params finished"<<std::endl;
 
 }
 
