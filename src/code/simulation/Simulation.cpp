@@ -1828,6 +1828,7 @@ void Simulation::initScene() {
     case Y0PLANE: {
       // primitives.push_back(&bowl);
       primitives.push_back(&plane1);
+      primitives.push_back(&rightUpperArm);
 
       for (Particle &p : particles) {
         p.velocity_init = p.velocity = Vec3d(0, -10, 0);
@@ -2913,7 +2914,6 @@ void Simulation::updateAreaMatrix() {
   std::vector<Triplet> triplets, tripletsInv;
   std::vector<double> area_per_particles(particles.size(), 0);
 
-
   for (Triangle &t  : mesh) {
     double A_i = t.area_rest; // will be distributed to each vertex
     int i0 = t.p0_idx;
@@ -2935,7 +2935,6 @@ void Simulation::updateAreaMatrix() {
       tripletsInv.emplace_back(i0, i0, 1.0 / area_per_particles[p.idx]);
     }
   }
-
 
   Area.setFromTriplets(triplets.begin(), triplets.end());
   Area_inv.setFromTriplets(tripletsInv.begin(), tripletsInv.end());

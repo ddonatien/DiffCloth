@@ -38,8 +38,8 @@ class CMakeBuild(build_ext):
                       '-DPYTHON_EXECUTABLE=' + sys.executable]
 
         # cfg = 'Debug' if self.debug else 'Release'
-        # cfg = 'Release'
-        cfg = 'Debug'
+        cfg = 'Release'
+        # cfg = 'Debug'
         build_args = ['--config', cfg]
         if platform.system() == "Windows":
             cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(cfg.upper(), extdir)]
@@ -60,7 +60,7 @@ class CMakeBuild(build_ext):
 
 setup(
     name='diffcloth_py',
-    version='0.1.0',
+    version='0.2.0',
     long_description='',
     ext_modules=[CMakeExtension('diffcloth_py')],
     cmdclass=dict(build_ext=CMakeBuild),
