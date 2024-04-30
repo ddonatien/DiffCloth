@@ -464,7 +464,7 @@ public:
             leftLeg(Vec3d(0, 0, 0), Vec3d(0, 1, -0.3), 5, 4),
             leftUpperArm(Vec3d(0, 0, 0), 0.6, 2.2, Vec3d(0, 1, 0), Vec3d(-1, -0.2, 0)),
             // rightUpperArm(Vec3d(0, 0, 0), 0.6, 2.2, Vec3d(0, 1, 0), Vec3d(1, -0.2, 0)),
-            rightUpperArm(Vec3d(-5.4, 2, 1), 0.4, 2, Vec3d(0, 1, 0), Vec3d(1, 0, 0)),
+            rightUpperArm(Vec3d(-5.4, 4, 2), 0.4, 2., Vec3d(0, 1, 0), Vec3d(1, 0, 0)),
             leftLowerArm(Vec3d(0, 0, 0), 0.6, 2, Vec3d(0, 1, 0), Vec3d(-1, -0.4, 0)),
             rightLowerArm(Vec3d(0, 0, 0), 0.6, 2, Vec3d(0, 1, 0), Vec3d(1, -0.4, 0)),
             body(Vec3d(0, 0, 0), 2, 3.3, Vec3d(0, 1, 0), Vec3d(0, 1, 0)),

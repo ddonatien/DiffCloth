@@ -1827,8 +1827,8 @@ void Simulation::initScene() {
 
     case Y0PLANE: {
       // primitives.push_back(&bowl);
-      primitives.push_back(&plane1);
       primitives.push_back(&rightUpperArm);
+      primitives.push_back(&plane1);
 
       for (Particle &p : particles) {
         p.velocity_init = p.velocity = Vec3d(0, -10, 0);
